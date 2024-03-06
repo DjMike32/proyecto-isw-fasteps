@@ -1,16 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(47, 12, 12, 0.87);
   background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  color:rgb(126, 71, 71);
 }
 
 a {
@@ -25,9 +33,10 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: rgb(153,173,233);
+background: radial-gradient(circle, rgba(153,173,233,1) 0%, rgba(112,159,215,1) 100%);
 }
 
 h1 {
@@ -60,8 +69,6 @@ button:focus-visible {
 
 #app {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -76,4 +83,34 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.navbar {
+  background-color: #333; /* Color de fondo del navbar */
+  color: white; /* Color del texto */
+  display: flex;
+  justify-content: space-between; /* Espaciado uniforme entre elementos */
+  padding: 10px 20px; /* Espacio interno */
+}
+
+.logo {
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+}
+
+.logo img {
+  width: 40px; /* Tamaño del logo */
+  margin-right: 10px; /* Espacio entre el logo y el texto */
+}
+
+.button {
+  padding: 8px 16px; /* Espacio interno */
+  background-color: #4CAF50; /* Color de fondo del botón */
+  border: none;
+  color: white; /* Color del texto del botón */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 10px; /* Espacio entre el botón y otros elementos */
 }
