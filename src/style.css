@@ -30,14 +30,13 @@ a:hover {
   color: #535bf2;
 }
 
-body {
+/* body {
   margin: 0;
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-  background: rgb(153,173,233);
-background: radial-gradient(circle, rgba(153,173,233,1) 0%, rgba(112,159,215,1) 100%);
-}
+  background: rgb(204, 214, 245);
+} */
 
 h1 {
   font-size: 3.2em;
