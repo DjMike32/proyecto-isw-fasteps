@@ -10,6 +10,19 @@ import {
   doc,
 } from "firebase/firestore";
 import router from "./router/router";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+const vuetify = createVuetify({
+  components,
+  directives,
+});
 // Función para agregar un usuario a Firestore
 
 // Llamar a la función para agregar un usuario
@@ -47,5 +60,8 @@ export async function eliminarUsuario(idUsuario) {
 
 const react = () => ``;
 
+library.add(fas, far, fab);
+
 const app = createApp(App);
-app.use(router).mount("#app");
+app.component("fa", FontAwesomeIcon);
+app.use(router, vuetify).mount("#app");

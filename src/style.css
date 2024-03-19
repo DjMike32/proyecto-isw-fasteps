@@ -17,9 +17,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  color:rgb(126, 71, 71);
+*{
+  box-sizing: border-box;
 }
+
 
 a {
   font-weight: 500;
@@ -38,12 +39,9 @@ a:hover {
   background: rgb(204, 214, 245);
 } */
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
 
-button {
+
+/* button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -53,13 +51,11 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
+} */
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 8px auto -webkit-focus-ring-color;
 }
 
 .card {
@@ -71,7 +67,7 @@ button:focus-visible {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -82,7 +78,7 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 .navbar {
   background-color: #333; /* Color de fondo del navbar */
@@ -102,14 +98,4 @@ button:focus-visible {
   margin-right: 10px; /* Espacio entre el logo y el texto */
 }
 
-.button {
-  padding: 8px 16px; /* Espacio interno */
-  background-color: #4CAF50; /* Color de fondo del botón */
-  border: none;
-  color: white; /* Color del texto del botón */
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 10px; /* Espacio entre el botón y otros elementos */
-}
+

@@ -5,7 +5,8 @@ import loginMenu from './components/loginMenu.vue';
 
 import 'tailwindcss/tailwind.css'
 import './style.css'
-
+import dashboard from './components/dashboard.vue';
+import 'animate.css';
 // Importar el archivo de estilos globalmente
 
 
@@ -14,6 +15,7 @@ import './style.css'
 
 <template>
   <router-view>
+
 
   </router-view>
 </template>
