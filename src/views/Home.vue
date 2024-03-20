@@ -1,13 +1,9 @@
 <script setup>
-import navbarAdmin from '../components/navbarAdmin.vue';
-import loginMenu from '../components/loginMenu.vue'
+    import navbarAdmin from "../components/navbarAdmin.vue";
+    import LoginMenu from "../components/LoginMenu.vue";
 </script>
 
 <template>
-    <navbarAdmin>
-
-    </navbarAdmin>
-    <loginMenu>
-
-    </loginMenu>
+    <navbarAdmin> </navbarAdmin>
+    <LoginMenu> </LoginMenu>
 </template>
