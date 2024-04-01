@@ -1,9 +1,18 @@
 <script setup>
-    import navbarAdmin from "../components/navbarAdmin.vue";
-    import LoginMenu from "../components/LoginMenu.vue";
+    import Modal from "../components/Modal.vue";
+    import { ref } from "vue";
+
+    const showModal = ref(false);
+
+    function toggleModal() {
+        showModal.value = !showModal.value;
+        console.log("hola");
+    }
 </script>
 
 <template>
-    <navbarAdmin> </navbarAdmin>
-    <LoginMenu> </LoginMenu>
+    <div v-if="showModal">
+        <Modal @close="toggleModal" :delay="5000"> </Modal>
+    </div>
+    <button @click="toggleModal">Aqui va el login</button>
 </template>

@@ -9,6 +9,12 @@ export default {
       colors: {
         bgblue: "#0F1C2E",
         bgdark: "#374357",
+        pca: "#29353c",
+        pcb: "#44576d",
+        pcc: "#768A96",
+        pcd: "#aac7d8",
+        pce: "#dfebf6",
+        pcf: "#e6e6e6",
       },
     },
   },
