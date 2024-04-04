@@ -1,5 +1,8 @@
+// * Librerias para crear la app de vue
 import { createApp } from "vue";
 import App from "./App.vue";
+
+// * Librerias para el manejo de la BD de Firebase
 import { db } from "./firebase"; // Importa la instancia de Firestore desde firebase.js
 import {
   collection,
@@ -9,22 +12,21 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+
+// * Router para gestionar las rutas de las vistas
 import router from "./router/router";
+
+// * Libreria para los iconos de fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 
-// Función para agregar un usuario a Firestore
-
-// Llamar a la función para agregar un usuario
-
-// Crear la aplicación Vue.js
-
+// ! Función para agregar usuarios
 export async function agregarUsuario(nombre, correo) {
   try {
-    // Agregar un nuevo documento a la colección "usuarios"
+    //  Agregar un nuevo documento a la colección "usuarios"
     const docRef = await addDoc(collection(db, "usuarios"), {
       nombre: nombre,
       correo: correo,
@@ -38,7 +40,7 @@ export async function agregarUsuario(nombre, correo) {
 
 export async function eliminarUsuario(idUsuario) {
   try {
-    // Obtener referencia al documento del usuario que se va a eliminar
+    //  Obtener referencia al documento del usuario que se va a eliminar
     const usuarioRef = doc(db, "usuarios", idUsuario);
 
     // Eliminar el documento del usuario
@@ -50,8 +52,6 @@ export async function eliminarUsuario(idUsuario) {
     console.error("Error al eliminar usuario:", error);
   }
 }
-
-const react = () => ``;
 
 library.add(fas, far, fab);
 

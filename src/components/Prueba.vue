@@ -39,4 +39,6 @@
     watch(searchTerm, () => {
         filterUsers();
     });
+
+    const numPrueba = 0;
 </script>

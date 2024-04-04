@@ -6,5 +6,5 @@
 <template>
     <DashboardTramites> </DashboardTramites>
     <br />
-    <Prueba></Prueba>
+    <Prueba v-if="(numPrueba = 0)"></Prueba>
 </template>

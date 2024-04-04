@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import SuperAdminHome from "../views/SuperAdminHome.vue";
 import About from "../views/About.vue";
 import SuperAdminBufetes from "../views/SuperAdminBufetes.vue";
+import SuperAdminMain from "../views/SuperAdminMain.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/sa/tramites",
     name: "SuperAdminBufetes",
     component: SuperAdminBufetes,
+  },
+  {
+    path: "/sa/main",
+    name: "SuperAdminMain",
+    component: SuperAdminMain,
   },
 ];
 

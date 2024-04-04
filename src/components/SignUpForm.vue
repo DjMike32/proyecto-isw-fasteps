@@ -75,19 +75,19 @@
     <p>tempSkill: {{ data.tempSkill }}</p>
 </template>
 
-<style>
+<style scoped>
     body {
         background-color: antiquewhite;
     }
 
-    form {
+    /* form {
         max-width: 360px;
         margin: auto;
         background: white;
         padding: 28px;
         border-radius: 10px;
         margin-top: 30px;
-    }
+    } */
 
     label {
         color: #aaa;
@@ -103,7 +103,7 @@
     select {
         display: block;
         padding: 5px 6px;
-        width: 100%;
+        width: 50%;
         box-sizing: border-box;
         border-bottom: 1px solid #dfcbcba8;
         color: #464549b1;
