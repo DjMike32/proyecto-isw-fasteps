@@ -36,62 +36,51 @@
 
 <template>
     <div class="flex h-screen bg-bgblue">
-        <!--
-    /**
-     ! hola 
-    */ 
-    -->
         <aside class="w-1/4 bg-bgblue opacity-65 text-white border-r-[0.5px] border-white my-4">
-            <div class="px-2">
-                <div class="flex mb-4 bg-[#eeeeee1b] rounded-xl p-1 relative overflow-visible">
-                    <img class="rounded-full size-[34px] absolute -left-1 -top-1" src="../assets/profile1.jfif"
-                        alt="" />
-                    <h1 class="text-xs font-bold ml-9 text-white py-2/3">Admin 1</h1>
+            <div class="flex h-full flex-col justify-center">
+                <div
+                    class="basis-1/12 bg-[#eeeeee1b] grid grid-flow-col justify-start mx-8 rounded-xl items-center mb-4">
+                    <img class="rounded-full size-[65px] -ml-2" src="../assets/profile1.jfif" alt="" />
+                    <h1 class="text-3xl font-bold text-white text-center ml-4">Maria</h1>
                 </div>
-
-                <!-- Lista de elementos del sidebar -->
-
-                <ul class="space-y-4">
-                    <!-- Elemento 1 -->
-                    <li class="flex items-center mb-1 text-sm">
-                        <button class="w-full hover:border-slate-400 hover:border-x-2 opacity-50">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
+                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
-                    </li>
-                    <!-- Elemento 2 -->
-                    <li class="mb-1 text-sm">
-                        <router-link to="/sa/tramites">
-                            <button class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2">
-                                <fa icon="fa-file-signature fa-solid" />
-                                <h2>Tramites</h2>
-                            </button>
-                        </router-link>
-                    </li>
-
-                    <li class="flex items-center mb-1 text-sm">
-                        <button class="w-full hover: border-slate-400 hover:border-x-2">
+                    </router-link>
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            <fa icon="fa-file-signature fa-solid" />
+                            <h2>Tramites</h2>
+                        </button>
+                    </router-link>
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
-                    </li>
-                    <li class="mb-1 text-sm">
-                        <router-link to="/" class="">
-                            <button class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2">
-                                <fa icon="fa-right-from-bracket fa-solid" />
-                                <h2>Cerrar Sesión</h2>
-                            </button>
-                        </router-link>
-                    </li>
-                    <!-- Elemento 3 -->
-                </ul>
+                    </router-link>
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            <fa icon="fa-right-from-bracket fa-solid" />
+                            <h2>Cerrar Sesión</h2>
+                        </button>
+                    </router-link>
+                </div>
             </div>
         </aside>
         <!-- Contenido principal -->
         <main class="flex-1 p-4 box-border">
-            <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col">
-                <div>
-                    <h1 class="static text-center w-full flex-1 animate__animated animate__bounce text-white">
+            <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-center">
+                <!-- <div>
+                    <h1
+                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX animate__delay-5s">
                         Bufetes
                     </h1>
                 </div>
@@ -112,18 +101,21 @@
                         <fa icon="fa-pen fa-solid" />
                         <h2>Actualizar</h2>
                     </button>
-                </div>
+                </div> -->
+                <h1 class="animate__animated animate__fadeIn animate__slower animate__delay-1s text-[600%] text-center">
+                    ¡ Hola !
+                </h1>
             </div>
         </main>
     </div>
 
-    <div>
+    <!-- <div>
         <form @submit.prevent="agregarUsuario">
             <input type="text" v-model="nombre" placeholder="Nombre" />
             <input type="email" v-model="correo" placeholder="Correo electrónico" />
             <button type="submit">Agregar Usuario</button>
         </form>
-    </div>
+    </div> -->
     <!-- <div class="container bg-white opacity-70 h-3/4 py-10 w-2/3">
         <button class="w-1/3 h-8 text-sm bg-red-200" @click="agregarUsuario('pedro', 'josue')">agregar</button>
     </div> -->
@@ -141,5 +133,17 @@
 
     .swal-modal {
         width: 60%;
+    }
+
+    @keyframes aparecer {
+        from {
+            width: 0;
+        }
+    }
+
+    .animacion {
+        animation: aparecer 1s steps(40, end);
+        overflow: hidden;
+        white-space: nowrap;
     }
 </style>

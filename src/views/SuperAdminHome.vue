@@ -9,7 +9,7 @@
 <template>
     <div class="bg-radius-gradient h-screen w-screen">
         <DashboardSa> </DashboardSa>
-        <Prueba></Prueba>
+
         <!-- <DashboardTramites></DashboardTramites> -->
     </div>
     <!-- <SignUpForm> </SignUpForm> -->

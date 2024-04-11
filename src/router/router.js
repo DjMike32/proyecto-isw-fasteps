@@ -1,21 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
+
 import SuperAdminHome from "../views/SuperAdminHome.vue";
-import About from "../views/About.vue";
+import SuperAdminTramites from "../views/SuperAdminTramites.vue";
 import SuperAdminBufetes from "../views/SuperAdminBufetes.vue";
 import SuperAdminMain from "../views/SuperAdminMain.vue";
+import LoginSa from "../views/LoginSa.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: About,
-  },
   {
     path: "/sa",
     name: "SuperAdminHome",
@@ -23,13 +14,23 @@ const routes = [
   },
   {
     path: "/sa/tramites",
-    name: "SuperAdminBufetes",
-    component: SuperAdminBufetes,
+    name: "SuperAdminTramites",
+    component: SuperAdminTramites,
   },
   {
     path: "/sa/main",
     name: "SuperAdminMain",
     component: SuperAdminMain,
+  },
+  {
+    path: "/",
+    name: "LoginSa",
+    component: LoginSa,
+  },
+  {
+    path: "/sa/bufetes",
+    name: "SupperAdminBufetes",
+    component: SuperAdminBufetes,
   },
 ];
 
