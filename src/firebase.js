@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -18,9 +19,10 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const storage = getStorage();
 const storageRef = ref(storage, "prueba-fotos-bufetes");
+const auth = getAuth();
 
 uploadBytes(storageRef);
 
 // Obtener una instancia de Firestore
 
-export { db, storage };
+export { db, storage, auth };

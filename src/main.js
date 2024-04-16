@@ -15,6 +15,8 @@ import {
 
 // * Router para gestionar las rutas de las vistas
 import router from "./router/router";
+import { useRouter } from "vue-router";
+import { getAuth } from "firebase/auth";
 
 // * Libreria para los iconos de fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -23,6 +25,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 
+const auth = getAuth();
 // ! Función para agregar usuarios
 export async function agregarUsuario(nombre, correo) {
   try {

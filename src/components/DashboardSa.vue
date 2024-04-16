@@ -4,9 +4,12 @@
     import { onMounted } from "vue";
     import { RouterLink } from "vue-router";
     import { ref } from "vue";
-    import { db } from "../firebase";
-    import { addDoc, collection } from "firebase/firestore";
+    import { db, auth } from "../firebase";
+    import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+    import { useRouter } from "vue-router"; // Importa el hook useRouter
+    // Ajusta la importación según tu configuración
 
+    const router = useRouter(); // Obtén la instancia del enrutador
     const nombre = ref("");
     const correo = ref("");
 
@@ -31,6 +34,74 @@
         }
     };
 
+    const cerrarSesion = () => {
+        auth
+            .signOut() // Utiliza el método signOut() para cerrar la sesión del usuario
+            .then(() => {
+                console.log("Sesión cerrada exitosamente");
+                router.push("/"); // Redirige al usuario al inicio de la página
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+    };
+
+    const nombreSuperAdmin = ref("");
+
+    const obtenerNombreSuperAdmin = async () => {
+        try {
+            const user = auth.currentUser;
+
+            if (user) {
+                // Obtener el documento del SuperAdmin correspondiente al UID del usuario actual
+                const superAdminDocRef = doc(db, "SuperAdmin", user.uid);
+                const superAdminDocSnap = await getDoc(superAdminDocRef);
+
+                if (superAdminDocSnap.exists()) {
+                    // El documento del SuperAdmin existe, obtener el valor del campo 'nombre'
+                    const nombre = superAdminDocSnap.data().nombre;
+
+                    nombreSuperAdmin.value = nombre;
+                } else {
+                    console.error("El documento del SuperAdmin no existe para el usuario actual.");
+                }
+            } else {
+                console.error("No se ha encontrado un usuario autenticado.");
+            }
+        } catch (error) {
+            console.error("Error al obtener el nombre del SuperAdmin:", error);
+        }
+    };
+    onMounted(obtenerNombreSuperAdmin);
+
+    const photoUrlSuperAdmin = ref("");
+
+    const obtenerPhotoUrlSuperAdmin = async () => {
+        try {
+            const user = auth.currentUser;
+
+            if (user) {
+                // Obtener el documento del SuperAdmin correspondiente al UID del usuario actual
+                const superAdminDocRef = doc(db, "SuperAdmin", user.uid);
+                const superAdminDocSnap = await getDoc(superAdminDocRef);
+
+                if (superAdminDocSnap.exists()) {
+                    // El documento del SuperAdmin existe, obtener el valor del campo 'photo_url'
+                    const photoUrl = superAdminDocSnap.data().photo_url;
+
+                    photoUrlSuperAdmin.value = photoUrl;
+                } else {
+                    console.error("El documento del SuperAdmin no existe para el usuario actual.");
+                }
+            } else {
+                console.error("No se ha encontrado un usuario autenticado.");
+            }
+        } catch (error) {
+            console.error("Error al obtener el photo_url del SuperAdmin:", error);
+        }
+    };
+
+    onMounted(obtenerPhotoUrlSuperAdmin);
     // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
@@ -40,8 +111,10 @@
             <div class="flex h-full flex-col justify-center">
                 <div
                     class="basis-1/12 bg-[#eeeeee1b] grid grid-flow-col justify-start mx-8 rounded-xl items-center mb-4">
-                    <img class="rounded-full size-[65px] -ml-2" src="../assets/profile1.jfif" alt="" />
-                    <h1 class="text-3xl font-bold text-white text-center ml-4">Maria</h1>
+                    <img class="rounded-full size-[65px] -ml-2" :src="photoUrlSuperAdmin" alt="" />
+                    <h1 class="text-3xl font-bold text-white text-center ml-4">
+                        {{ nombreSuperAdmin }}
+                    </h1>
                 </div>
                 <div class="basis-11/12 grid grid-flow-row grid-rows-4">
                     <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
@@ -65,13 +138,13 @@
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-                        <button
+                    <a class="flex flex-col justify-center mx-4">
+                        <button @click="cerrarSesion"
                             class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
-                    </router-link>
+                    </a>
                 </div>
             </div>
         </aside>
@@ -103,7 +176,7 @@
                     </button>
                 </div> -->
                 <h1 class="animate__animated animate__fadeIn animate__slower animate__delay-1s text-[600%] text-center">
-                    ¡ Hola !
+                    ¡ Hola, {{ nombreSuperAdmin }} !
                 </h1>
             </div>
         </main>

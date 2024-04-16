@@ -5,6 +5,8 @@ import SuperAdminTramites from "../views/SuperAdminTramites.vue";
 import SuperAdminBufetes from "../views/SuperAdminBufetes.vue";
 import SuperAdminMain from "../views/SuperAdminMain.vue";
 import LoginSa from "../views/LoginSa.vue";
+import SuperAdminActualizar from "../views/SuperAdminActualizar.vue";
+import SuperAdminBufetesAgregar from "../views/SuperAdminBufetesAgregar.vue";
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
     path: "/sa/bufetes",
     name: "SupperAdminBufetes",
     component: SuperAdminBufetes,
+  },
+  {
+    path: "/sa/actualizar",
+    name: "SuperAdminActualizar",
+    component: SuperAdminActualizar,
+  },
+  {
+    path: "/sa/bufetes/agregar",
+    name: "SuperAdminBufetesAgregar",
+    component: SuperAdminBufetesAgregar,
   },
 ];
 

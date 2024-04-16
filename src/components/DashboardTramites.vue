@@ -6,10 +6,27 @@
   import { ref } from "vue";
   import { db } from "../firebase";
   import { addDoc, collection } from "firebase/firestore";
+  import { getAuth } from "firebase/auth";
+  import { useRouter } from "vue-router"; // Importa el hook useRouter
+
+  const router = useRouter(); // Obtén la instancia del enrutador
+
+  const auth = getAuth();
 
   const nombre = ref("");
   const correo = ref("");
 
+  const cerrarSesion = () => {
+    auth
+      .signOut() // Utiliza el método signOut() para cerrar la sesión del usuario
+      .then(() => {
+        console.log("Sesión cerrada exitosamente");
+        router.push("/"); // Redirige al usuario al inicio de la página
+      })
+      .catch((error) => {
+        console.error("Error al cerrar sesión:", error);
+      });
+  };
   // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
@@ -127,13 +144,13 @@
               <h2>Perfil</h2>
             </button>
           </router-link>
-          <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-            <button
+          <a class="flex flex-col justify-center mx-4">
+            <button @click="cerrarSesion"
               class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
-              <fa icon="fa-right-from-bracket fa-solid " />
+              <fa icon="fa-right-from-bracket fa-solid" />
               <h2>Cerrar Sesión</h2>
             </button>
-          </router-link>
+          </a>
         </div>
       </div>
     </aside>
@@ -146,24 +163,26 @@
             <fa icon="fa-chevron-left fa-solid" />
           </router-link>
           <h1
-            class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX animate__delay-5s text-3xl mt-2">
+            class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX animate__delay-1s text-[55px] mt-2">
             Tramites
           </h1>
         </div>
-        <div class="grid flex-auto p-2 grid-cols-2 gap-12 m-6">
-          <button class="bg-pcb rounded-xl text-3xl hover:opacity-50" @click="agregarUsuario('MG2', 'MG2@gmail.com')">
+        <div class="grid flex-auto p-2 grid-cols-2 gap-20 mx-12 my-6">
+          <button class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50"
+            @click="agregarUsuario('MG2', 'MG2@gmail.com')">
             <fa icon="fa-plus fa-solid" />
             <h2>Agregar</h2>
           </button>
-          <button class="bg-pcb rounded-xl text-3xl hover:opacity-50" @click="eliminarUsuario('AiyNCEQoYYHqvb6THQQ1')">
+          <button class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50"
+            @click="eliminarUsuario('AiyNCEQoYYHqvb6THQQ1')">
             <fa icon="fa-trash fa-solid" />
             <h2>Eliminar</h2>
           </button>
-          <button class="bg-pcb rounded-xl text-3xl hover:opacity-50">
+          <button class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50">
             <fa icon="fa-magnifying-glass fa-solid" />
             <h2>Buscar</h2>
           </button>
-          <button class="bg-pcb rounded-xl text-3xl hover:opacity-50" @click="successAlert">
+          <button class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50" @click="successAlert">
             <fa icon="fa-pen fa-solid" />
             <h2>Actualizar</h2>
           </button>
