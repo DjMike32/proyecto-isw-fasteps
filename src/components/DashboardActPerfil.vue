@@ -9,13 +9,29 @@
         nombreSuperAdmin,
         photoUrlSuperAdmin,
         obtenerDatosSuperAdmin,
+        ApellidoSuperAdmin,
     } from "../loginFunctions";
+    import { useRouter } from "vue-router";
 
     const user = ref(null);
     const uid = auth.currentUser?.uid;
     const userId = ref(null); // Variable reactiva para almacenar el ID del usuario
     const file = ref(null); // Variable reactiva para almacenar el archivo seleccionado
     const fileSelected = ref(false); // Variable reactiva para controlar si se ha seleccionado un archivo
+    const tempImageUrl = ref(null);
+
+    const router = useRouter(); // Obtén la instancia del enrutador
+    const cerrarSesion = () => {
+        auth
+            .signOut() // Utiliza el método signOut() para cerrar la sesión del usuario
+            .then(() => {
+                console.log("Sesión cerrada exitosamente");
+                router.push("/"); // Redirige al usuario al inicio de la página
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+    };
 
     // Función para obtener el ID del usuario actualmente autenticado
     const obtenerIdUsuario = () => {
@@ -43,11 +59,13 @@
         nombre: "",
         apellido: "",
         correo: "",
-        fechaCreacion: serverTimestamp(), // Fecha de creación inicial
+        fechaCreacion: null, // Inicialmente null
         fechaModificacion: "", // Inicialmente null
         photo_url: "", // Campo para almacenar la URL de la imagen
         // Agrega más campos según sea necesario
     });
+
+    let fechaCreacionEstablecida = false; // Variable para rastrear si la fecha de creación ya ha sido establecida
 
     const guardarPerfil = async () => {
         obtenerIdUsuario();
@@ -60,6 +78,12 @@
                 await uploadFile();
             }
 
+            // Si la fecha de creación aún no ha sido establecida, establecerla
+            if (!fechaCreacionEstablecida) {
+                perfil.value.fechaCreacion = serverTimestamp(); // Establece la fecha de creación inicial
+                fechaCreacionEstablecida = true; // Marcar como establecida
+            }
+
             perfil.value.fechaModificacion = serverTimestamp(); // Actualiza la fecha de modificación
 
             await setDoc(doc(db, "SuperAdmin", userId.value), perfil.value);
@@ -67,13 +91,19 @@
 
             // Vuelve a cargar el perfil después de guardar los cambios
             await cargarPerfil();
+            swal({
+                icon: "success",
+                title: "Usuario actualizado",
+            });
 
-            // Puedes redirigir al usuario a otra página después de guardar el perfil si lo deseas
+            setTimeout(() => {
+                // Forzar el reinicio del navegador
+                location.reload();
+            }, 3000); // 3000 milisegundos = 3 segundos
         } catch (error) {
             console.error("Error al guardar el perfil de SuperAdmin:", error);
         }
     };
-
     const cargarPerfil = async () => {
         try {
             const user = auth.currentUser;
@@ -105,6 +135,9 @@
         if (selectedFile) {
             file.value = selectedFile;
             fileSelected.value = true;
+
+            // Crear una URL temporal para mostrar la imagen seleccionada
+            tempImageUrl.value = URL.createObjectURL(selectedFile);
         } else {
             file.value = null;
             fileSelected.value = false;
@@ -203,20 +236,91 @@
         <!-- Contenido principal -->
         <main class="flex-1 p-4 box-border">
             <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-center">
-                <form @submit.prevent="guardarPerfil">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" v-model="perfil.nombre" required />
+                <div class="">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
+                        <fa icon="fa-chevron-left fa-solid" />
+                    </router-link>
+                    <h1
+                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
+                        Actualizar Perfil
+                    </h1>
+                </div>
 
-                    <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" v-model="perfil.apellido" required />
+                <div class="grid flex-auto p-2 grid-cols-1 gap-20 mx-12 my-6">
+                    <form @submit.prevent="guardarPerfil"
+                        class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-3xl p-2 gap-6">
+                        <div class="flex flex-col gap-y-1">
+                            <label class="text-[85%] ml-1" for="">Nombre: </label>
+                            <input type="text" :placeholder="nombreSuperAdmin" id="nombre" v-model="perfil.nombre"
+                                required
+                                class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        </div>
+                        <!-- <div>
+                            <label class="" for="">Direccion del bufete</label>
+                            <div class="select-container relative">
+                                <select
+                                    class="w-full p-1 text-pce italic bg-gray-800 placeholder-italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2 overflow-y-auto max-h-40">
+                                    <option value="san-pedro-sula">San Pedro Sula</option>
+                                    <option value="tegucigalpa">Tegucigalpa</option>
+                                    <option value="la-ceiba">La Ceiba</option>
+                                    <option value="san-pedro-sula">San Pedro Sula</option>
+                                    <option value="tegucigalpa">Tegucigalpa</option>
+                                    <option value="la-ceiba">La Ceiba</option>
+                                    <option value="san-pedro-sula">San Pedro Sula</option>
+                                    <option value="la-ceiba">La Ceiba</option>
+                                    <option value="san-pedro-sula">San Pedro Sula</option>
+                                    <option value="tegucigalpa">Tegucigalpa</option>
+                                    <option value="la-ceiba">La Ceiba</option>
+                                    <option value="san-pedro-sula">San Pedro Sula</option>
 
-                    <label for="correo">Correo electrónico:</label>
-                    <input type="email" id="correo" v-model="perfil.correo" required />
+                                    
+                                </select>
+                            </div>
+                        </div> -->
+                        <div class="flex flex-col gap-y-1">
+                            <label class="text-[85%] ml-1" for="">Apellido: </label>
+                            <input type="text" :placeholder="ApellidoSuperAdmin" id="apellido" v-model="perfil.apellido"
+                                required
+                                class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        </div>
+                        <!-- <div>
+                            <label class="" for="">Telefono</label>
+                            <input type="" pattern="\+504 \d{4}-\d{4}"
+                                class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
+                                value="+504" inputmode="numeric" />
+                        </div> -->
 
-                    <input type="file" @change="handleFileSelect" accept="image/*" />
+                        <div class="relative">
+                            <label class="" for="">Correo</label>
+                            <input type="email" id="correo" v-model="perfil.correo" required
+                                class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        </div>
 
-                    <button type="submit" :disabled="!fileSelected">Guardar Perfil</button>
-                </form>
+                        <div class="relative">
+                            <label for="input-file">
+                                <!-- Aquí va la imagen actual del usuario -->
+                                <img :src="photoUrlSuperAdmin" alt="Imagen del usuario" @click="openFileInput"
+                                    class="size-[100px]" />
+                                <div v-if="tempImageUrl">
+                                    <img :src="tempImageUrl" alt="Imagen seleccionada" class="size-[100px]" />
+                                    <h1>Imagen Previa</h1>
+                                </div>
+
+                                <!-- Input de tipo file oculto -->
+                                <input type="file" id="input-file" style="display: none" @change="handleFileSelect"
+                                    accept="image/*" />
+                            </label>
+                        </div>
+
+                        <!-- <div class="p-1 col-span-2">
+                    <input type="file"
+                        class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-3xlfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+                </div> -->
+
+                        <button type="submit" :disabled="!fileSelected">Guardar Perfil</button>
+                    </form>
+                </div>
             </div>
         </main>
     </div>

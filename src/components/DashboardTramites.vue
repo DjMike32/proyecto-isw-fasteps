@@ -59,7 +59,7 @@
               <h2>Tramites</h2>
             </button>
           </router-link>
-          <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
+          <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
             <button
               class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
               <fa icon="fa-id-card fa-solid" />
@@ -81,7 +81,7 @@
       <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-center">
         <div class="">
           <router-link to="/sa"
-            class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
+            class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-3xl z-20 hover:scale-125">
             <fa icon="fa-chevron-left fa-solid" />
           </router-link>
           <h1
@@ -89,33 +89,19 @@
             Tramites
           </h1>
         </div>
-        <div class="grid flex-auto p-2 grid-cols-2 gap-20 mx-12 my-6">
+        <div class="grid flex-auto p-2 grid-cols-2 grid-rows-4 gap-20 mx-12 mb-6">
           <router-link
-            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
-            <fa icon="fa-plus fa-solid" class="text-white" />
-            <h2 class="text-white">Agregar</h2>
+            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center row-span-2 row-start-2 gap-2"
+            to="/sa/tramites/pago">
+            <fa icon=" fa-piggy-bank fa-solid" class="text-white text-[40px]" />
+            <h2 class="text-white">De Pago</h2>
           </router-link>
 
           <router-link
-            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
-            <fa icon="fa-trash fa-solid" />
-            <h2>Eliminar</h2>
-          </router-link>
-
-          <router-link
-            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
-            <fa icon="fa-magnifying-glass fa-solid" />
-            <h2>Buscar</h2>
-          </router-link>
-
-          <router-link
-            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
-            <fa icon="fa-pen fa-solid" />
-            <h2>Actualizar</h2>
+            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center row-span-2 row-start-2 gap-2"
+            to="/sa/tramites/gratis">
+            <fa icon="fa-book-open-reader fa-solid" class="text-white text-[40px]" />
+            <h2>Gratuitos</h2>
           </router-link>
         </div>
       </div>

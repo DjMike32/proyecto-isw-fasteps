@@ -14,12 +14,12 @@
     obtenerDatosSuperAdmin,
   } from "../loginFunctions";
 
-  const router = useRouter(); // Obtén la instancia del enrutador
-
   const auth = getAuth();
 
   const nombre = ref("");
   const correo = ref("");
+
+  const router = useRouter(); // Obtén la instancia del enrutador
   const cerrarSesion = () => {
     auth
       .signOut() // Utiliza el método signOut() para cerrar la sesión del usuario
@@ -59,7 +59,7 @@
               <h2>Tramites</h2>
             </button>
           </router-link>
-          <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
+          <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
             <button
               class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
               <fa icon="fa-id-card fa-solid" />
