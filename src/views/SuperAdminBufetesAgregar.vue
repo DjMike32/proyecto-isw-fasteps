@@ -4,7 +4,7 @@
 
 <template>
     <DashboardAggBufetes></DashboardAggBufetes>
-    <DashboardVerBufetes></DashboardVerBufetes>
+    <!-- <DashboardVerBufetes></DashboardVerBufetes>
     <DashboardUpdateBufetes></DashboardUpdateBufetes>
-    <DashboardElimBufetes></DashboardElimBufetes>
+    <DashboardElimBufetes></DashboardElimBufetes> -->
 </template>

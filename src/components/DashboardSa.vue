@@ -3,10 +3,16 @@
     import { eliminarUsuario } from "../main";
     import { onMounted } from "vue";
     import { RouterLink } from "vue-router";
-    import { ref } from "vue";
+    import { ref, watchEffect } from "vue";
     import { db, auth } from "../firebase";
     import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-    import { useRouter } from "vue-router"; // Importa el hook useRouter
+    import { useRouter } from "vue-router";
+    import {
+        nombreSuperAdmin,
+        photoUrlSuperAdmin,
+        obtenerDatosSuperAdmin,
+    } from "../loginFunctions";
+    // Importa el hook useRouter
     // Ajusta la importación según tu configuración
 
     const router = useRouter(); // Obtén la instancia del enrutador
@@ -46,62 +52,6 @@
             });
     };
 
-    const nombreSuperAdmin = ref("");
-
-    const obtenerNombreSuperAdmin = async () => {
-        try {
-            const user = auth.currentUser;
-
-            if (user) {
-                // Obtener el documento del SuperAdmin correspondiente al UID del usuario actual
-                const superAdminDocRef = doc(db, "SuperAdmin", user.uid);
-                const superAdminDocSnap = await getDoc(superAdminDocRef);
-
-                if (superAdminDocSnap.exists()) {
-                    // El documento del SuperAdmin existe, obtener el valor del campo 'nombre'
-                    const nombre = superAdminDocSnap.data().nombre;
-
-                    nombreSuperAdmin.value = nombre;
-                } else {
-                    console.error("El documento del SuperAdmin no existe para el usuario actual.");
-                }
-            } else {
-                console.error("No se ha encontrado un usuario autenticado.");
-            }
-        } catch (error) {
-            console.error("Error al obtener el nombre del SuperAdmin:", error);
-        }
-    };
-    onMounted(obtenerNombreSuperAdmin);
-
-    const photoUrlSuperAdmin = ref("");
-
-    const obtenerPhotoUrlSuperAdmin = async () => {
-        try {
-            const user = auth.currentUser;
-
-            if (user) {
-                // Obtener el documento del SuperAdmin correspondiente al UID del usuario actual
-                const superAdminDocRef = doc(db, "SuperAdmin", user.uid);
-                const superAdminDocSnap = await getDoc(superAdminDocRef);
-
-                if (superAdminDocSnap.exists()) {
-                    // El documento del SuperAdmin existe, obtener el valor del campo 'photo_url'
-                    const photoUrl = superAdminDocSnap.data().photo_url;
-
-                    photoUrlSuperAdmin.value = photoUrl;
-                } else {
-                    console.error("El documento del SuperAdmin no existe para el usuario actual.");
-                }
-            } else {
-                console.error("No se ha encontrado un usuario autenticado.");
-            }
-        } catch (error) {
-            console.error("Error al obtener el photo_url del SuperAdmin:", error);
-        }
-    };
-
-    onMounted(obtenerPhotoUrlSuperAdmin);
     // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
@@ -131,7 +81,7 @@
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
                         <button
                             class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
                             <fa icon="fa-id-card fa-solid" />

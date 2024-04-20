@@ -46,9 +46,15 @@
         // El usuario no está en la colección de usuarios, puede continuar
 
         console.log("Inicio de sesión exitoso");
+        router.push("/sa");
       }
-      router.push("/sa");
     } catch (error) {
+      swal({
+        dangerMode: true,
+        title: "Contraseña o correo incorrectos ",
+        icon: "error",
+        button: "Reintentar",
+      });
       console.error("Error al iniciar sesión:", error);
     }
   };
@@ -99,7 +105,9 @@
 
     <form @submit.prevent="iniciarSesion"
       class="loginbg col-span-2 row-span-3 row-start-2 col-start-3 rounded-xl shadow-xl z-30 grid grid-cols- grid-rows-4 gap-y-6 text-white p-3 -mt-2 text-2xl">
-      <h1 class="italic text-3xl font-bold text-center col-span-2 self-center">Bufete</h1>
+      <h1 class="italic text-3xl font-bold text-center col-span-2 self-center">
+        Administrador
+      </h1>
       <div class="grid content-start space-y-1 col-span-2">
         <label for="email" class="text-2xl justify-self-start">User</label>
         <input v-model="email" type="email" id="email"

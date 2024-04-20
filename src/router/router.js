@@ -7,6 +7,7 @@ import SuperAdminMain from "../views/SuperAdminMain.vue";
 import LoginSa from "../views/LoginSa.vue";
 import SuperAdminActualizar from "../views/SuperAdminActualizar.vue";
 import SuperAdminBufetesAgregar from "../views/SuperAdminBufetesAgregar.vue";
+import DashboardTemplate from "../components/DashboardTemplate.vue";
 
 const routes = [
   {

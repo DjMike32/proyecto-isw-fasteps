@@ -76,7 +76,7 @@
             class="w-1/4 bg-bgblue text-pcd border-r-[0.5px] border-white my-4 flex flex-col justify-between justify-items-center pr-2">
             <div class="flex bg-[#eeeeee1b] rounded-xl relative h-6 w-auto items-center ml-1.5 gap-3.5">
                 <img class="rounded-full size-6 scale-125" src="../assets/profile1.jfif" alt="" />
-                <h1 class="text-xs font-bold">Michael</h1>
+                <h1 class="text-3xl font-bold">Michael</h1>
             </div>
 
             <!-- Lista de elementos del sidebar -->
@@ -117,7 +117,7 @@
         <!-- Contenido principal -->
         <main class="flex-1 p-4 box-border">
             <form @submit.prevent
-                class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-xs p-2 gap-2">
+                class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-3xl p-2 gap-6">
                 <h1 class="text-pcd text-center col-span-2 text-md">Nuevo bufete</h1>
                 <div class="flex flex-col gap-y-1">
                     <label class="text-[85%] ml-1" for="" placeholder="hola">Nombre del bufete</label>
@@ -152,15 +152,28 @@
                         class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
                         value="+504" inputmode="numeric" />
                 </div>
+                <div>
+                    <label class="" for="">Telefono</label>
+                    <input type="" pattern="\+504 \d{4}-\d{4}"
+                        class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
+                        value="+504" inputmode="numeric" />
+                </div>
 
                 <div class="relative">
+                    <label class="" for="">Correo</label>
                     <input type="text" v-model="inputValue" placeholder="Ingresa tu texto"
                         class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                </div>
+                <div>
+                    <label class="" for="">Telefono</label>
+                    <input type="" pattern="\+504 \d{4}-\d{4}"
+                        class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
+                        value="+504" inputmode="numeric" />
                 </div>
 
                 <!-- <div class="p-1 col-span-2">
                     <input type="file"
-                        class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-xsfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+                        class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-3xlfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
                 </div> -->
 
                 <button class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
