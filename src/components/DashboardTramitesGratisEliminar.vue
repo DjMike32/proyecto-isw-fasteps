@@ -1,29 +1,22 @@
 <script setup>
-    import swal from "sweetalert";
-    import { eliminarUsuario } from "../main";
-    import { onMounted, ref, watch } from "vue";
+    import Swal from "sweetalert2";
+    import { deleteDoc, doc, getDoc } from "firebase/firestore";
+
     import { RouterLink } from "vue-router";
 
-    import { useRouter } from "vue-router"; // Importa el hook useRouter
+    import { db, auth } from "../firebase";
+
     import {
         nombreSuperAdmin,
         photoUrlSuperAdmin,
         obtenerDatosSuperAdmin,
     } from "../loginFunctions";
-
-    import { db, auth } from "../firebase";
-    import {
-        addDoc,
-        collection,
-        getDocs,
-        query,
-        where,
-        doc,
-        getDoc,
-        deleteDoc,
-    } from "firebase/firestore";
-
-    const router = useRouter(); // Obtén la instancia del enrutador
+    // Importa el hook useRouter
+    // Ajusta la importación según tu configuración
+    import { watch } from "vue";
+    import { getDocs, query, where } from "firebase/firestore";
+    import { useRouter } from "vue-router";
+    const router = useRouter();
 
     const cerrarSesion = () => {
         auth
@@ -37,74 +30,20 @@
             });
     };
 
-    const tramites = ref([]);
-    const searchTerm = ref("");
-    const mostrarTodosPasos = ref({}); // Objeto para rastrear qué tramites tienen todos los pasos mostrados
-    const pasosMostrados = 3; // Número de pasos mostrados por defecto
-    const tramiteToDelete = ref("");
+    let bufeteIdToDelete = "";
 
-    const cargarTramites = async () => {
-        const querySnapshot = await getDocs(collection(db, "tramites"));
-        tramites.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    };
-
-    const toggleMostrarTodosPasos = (idTramite) => {
-        mostrarTodosPasos.value[idTramite] = !mostrarTodosPasos.value[idTramite];
-    };
-
-    const loadTramites = async () => {
-        const querySnapshot = await getDocs(collection(db, "Tramites_Gratuitos"));
-        tramites.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    };
-
-    const filteredTramites = ref([]);
-
-    const filterTramites = () => {
-        if (!searchTerm.value) {
-            filteredTramites.value = tramites.value;
-        } else {
-            filteredTramites.value = tramites.value.filter(
-                (tramite) =>
-                    tramite.Nombre &&
-                    tramite.Nombre.toLowerCase().includes(searchTerm.value.toLowerCase())
-            );
-        }
-    };
-
-    onMounted(() => {
-        loadTramites();
-    });
-
-    watch(searchTerm, () => {
-        filterTramites();
-    });
-
-    const nombre = ref("");
-    const correo = ref("");
-
-    const copiarUID = (uid) => {
-        navigator.clipboard
-            .writeText(uid)
-            .then(() => {
-                console.log("UID copiado al portapapeles:", uid);
-            })
-            .catch((error) => {
-                console.error("Error al copiar UID:", error);
-            });
-    };
-    const tramiteIdToDelete = ref("");
-    const confirmarEliminarTramite = async () => {
+    const confirmarEliminacion = async () => {
         try {
-            const docRef = doc(db, "Tramites_Gratuitos", tramiteIdToDelete);
+            const docRef = doc(db, "Tramites_Gratuitos", bufeteIdToDelete);
             const docSnap = await getDoc(docRef);
 
             if (!docSnap.exists()) {
-                throw new Error("No se encontró el trámite con el UID proporcionado");
+                throw new Error("No se encontró el bufete con el UID proporcionado");
             }
 
             const tramiteData = docSnap.data();
             const confirmacion = await Swal.fire({
-                title: `¿Seguro que deseas eliminar el trámite "${tramiteData.Nombre}"?`,
+                title: `¿Seguro que deseas eliminar el bufete "${tramiteData.Nombre}"?`,
                 text: "Esta acción no se puede deshacer",
                 icon: "warning",
                 showCancelButton: true,
@@ -115,15 +54,14 @@
 
             if (confirmacion.isConfirmed) {
                 await deleteDoc(docRef);
-                Swal.fire("Eliminado", "El trámite ha sido eliminado correctamente", "success");
-                tramiteIdToDelete = ""; // Limpiar el input después de la eliminación
+                Swal.fire("Eliminado", "El bufete ha sido eliminado correctamente", "success");
+                bufeteIdToDelete = ""; // Limpiar el input después de la eliminación
             }
         } catch (error) {
-            console.error("Error al eliminar el trámite:", error);
-            Swal.fire("Error", "Hubo un problema al eliminar el trámite", "error");
+            console.error("Error al eliminar el bufete:", error);
+            Swal.fire("Error", "Hubo un problema al eliminar el bufete", "error");
         }
     };
-    // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
 <template>
@@ -182,15 +120,13 @@
                         Tramites Gratuitos
                     </h1>
                 </div>
-                <div class="grid flex-auto p-2 scroll-container">
-                    <div>
-                        <label for="uid">UID del Trámite:</label>
-                        <input type="text" id="uid" v-model="tramiteToDelete"
-                            placeholder="Ingrese el UID del trámite" />
-                    </div>
-
-                    <!-- Botón para eliminar el trámite -->
-                    <button @click="confirmarEliminarTramite">Eliminar Trámite</button>
+                <div>
+                    <h2>Eliminar Bufete</h2>
+                    <input v-model="bufeteIdToDelete" placeholder="Ingrese el UID del bufete a eliminar" />
+                    <button @click="confirmarEliminacion"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        Eliminar
+                    </button>
                 </div>
             </div>
         </main>

@@ -1,5 +1,5 @@
 <script setup>
-    import swal from "sweetalert";
+    import Swal from "sweetalert2";
     import { eliminarUsuario } from "../main";
     import { onMounted, ref, watch } from "vue";
     import { RouterLink } from "vue-router";
