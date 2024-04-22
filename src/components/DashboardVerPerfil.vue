@@ -23,6 +23,21 @@
         correoSuperAdmin,
         fechaCreacionUsuario,
     } from "../loginFunctions";
+    import { useRouter } from "vue-router";
+
+    const router = useRouter();
+
+    const cerrarSesion = () => {
+        auth
+            .signOut() // Utiliza el método signOut() para cerrar la sesión del usuario
+            .then(() => {
+                console.log("Sesión cerrada exitosamente");
+                router.push("/"); // Redirige al usuario al inicio de la página
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+    };
 
     const inputValue = ref("");
 
@@ -180,15 +195,16 @@
                         Administrador {{ nombreSuperAdmin }} {{ ApellidoSuperAdmin }}
                     </h1>
                     <router-link to="/sa/perfil/actualizar"
-                        class="flex flex-col justify-center mx-4 ml-8 mt-4 text-2xl z-20 hover:scale-125">
-                        <fa icon="fa-chevron-left fa-solid" />
+                        class="flex flex-col justify-center mx-4 mt-4 text-2xl ml-12 z-20 hover: opacity-70">
+                        <span> Editar Perfil</span>
                     </router-link>
                 </div>
                 <div class="grid flex-auto p-2 gap-20 mx-12 my-6">
                     <form @submit.prevent="guardarPerfil"
                         class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-3xl p-2 gap-6">
-                        <div class="relative flex justify-center items-center">
-                            <img class="w-1/2 max-w-full h-auto" :src="photoUrlSuperAdmin" alt="" />
+                        <div class="relative flex flex-col">
+                            <span>imagen actual</span>
+                            <img class="size-[150px] rounded-[50%]" :src="photoUrlSuperAdmin" alt="" />
                         </div>
 
                         <div class="flex flex-col gap-y-1">

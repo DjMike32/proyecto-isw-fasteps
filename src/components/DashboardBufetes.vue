@@ -99,21 +99,21 @@
 
           <router-link
             class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
+            to="/sa/bufetes/borrar">
             <fa icon="fa-trash fa-solid" />
             <h2>Eliminar</h2>
           </router-link>
 
           <router-link
             class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
+            to="/sa/bufetes/buscar">
             <fa icon="fa-magnifying-glass fa-solid" />
             <h2>Buscar</h2>
           </router-link>
 
           <router-link
             class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/agregar">
+            to="/sa/bufetes/actualizar">
             <fa icon="fa-pen fa-solid" />
             <h2>Actualizar</h2>
           </router-link>

@@ -65,7 +65,7 @@
         // Agrega más campos según sea necesario
     });
 
-    let fechaCreacionEstablecida = false; // Variable para rastrear si la fecha de creación ya ha sido establecida
+    let fechaCreacionEstablecida = false; // Variable auxiliar para controlar si la fecha de creación ha sido establecida
 
     const guardarPerfil = async () => {
         obtenerIdUsuario();
@@ -78,19 +78,23 @@
                 await uploadFile();
             }
 
-            // Si la fecha de creación aún no ha sido establecida, establecerla
-            if (!fechaCreacionEstablecida) {
+            // Si la fecha de creación aún no ha sido establecida, o si es null, establecerla
+            if (!fechaCreacionEstablecida || !perfil.value.fechaCreacion) {
                 perfil.value.fechaCreacion = serverTimestamp(); // Establece la fecha de creación inicial
-                fechaCreacionEstablecida = true; // Marcar como establecida
+                fechaCreacionEstablecida = true; // Marca la fecha de creación como establecida
             }
 
-            perfil.value.fechaModificacion = serverTimestamp(); // Actualiza la fecha de modificación
+            // Guarda la fecha de modificación
+            const fechaActual = serverTimestamp();
+            perfil.value.fechaModificacion = fechaActual;
 
+            // Guarda el perfil en la base de datos
             await setDoc(doc(db, "SuperAdmin", userId.value), perfil.value);
             console.log("Perfil de SuperAdmin guardado correctamente.");
 
             // Vuelve a cargar el perfil después de guardar los cambios
             await cargarPerfil();
+
             swal({
                 icon: "success",
                 title: "Usuario actualizado",
@@ -100,6 +104,8 @@
                 // Forzar el reinicio del navegador
                 location.reload();
             }, 3000); // 3000 milisegundos = 3 segundos
+
+            // Puedes redirigir al usuario a otra página después de guardar el perfil si lo deseas
         } catch (error) {
             console.error("Error al guardar el perfil de SuperAdmin:", error);
         }
@@ -296,29 +302,33 @@
                             <input type="email" id="correo" v-model="perfil.correo" required
                                 class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                         </div>
-
+                        <div></div>
                         <div class="relative">
                             <label for="input-file">
                                 <!-- Aquí va la imagen actual del usuario -->
+                                <span>Imagen actual</span>
                                 <img :src="photoUrlSuperAdmin" alt="Imagen del usuario" @click="openFileInput"
-                                    class="size-[100px]" />
-                                <div v-if="tempImageUrl">
-                                    <img :src="tempImageUrl" alt="Imagen seleccionada" class="size-[100px]" />
-                                    <h1>Imagen Previa</h1>
-                                </div>
-
-                                <!-- Input de tipo file oculto -->
-                                <input type="file" id="input-file" style="display: none" @change="handleFileSelect"
-                                    accept="image/*" />
+                                    class="size-[150px] ml-12 rounded-[50%]" />
                             </label>
                         </div>
+                        <div v-if="tempImageUrl">
+                            <h1>Previa nueva imagen</h1>
+                            <img :src="tempImageUrl" alt="Imagen seleccionada"
+                                class="size-[150px] ml-12 rounded-[50%]" />
+                        </div>
+
+                        <!-- Input de tipo file oculto -->
+                        <input type="file" id="input-file" style="display: none" @change="handleFileSelect"
+                            accept="image/*" />
 
                         <!-- <div class="p-1 col-span-2">
                     <input type="file"
                         class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-3xlfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
                 </div> -->
 
-                        <button type="submit" :disabled="!fileSelected">Guardar Perfil</button>
+                        <button type="submit" class="col-span-2 bg-bgdark" :disabled="!fileSelected">
+                            Guardar Perfil
+                        </button>
                     </form>
                 </div>
             </div>

@@ -1,27 +1,16 @@
 <script setup>
-    import { ref, watchEffect } from "vue";
-    import { db, auth } from "../firebase.js";
-    import { onAuthStateChanged } from "firebase/auth";
-    import {
-        collection,
-        doc,
-        setDoc,
-        addDoc,
-        serverTimestamp,
-        getDocs,
-    } from "firebase/firestore"; // Asegúrate de importar la instancia de Firebase
-    // Asegúrate de importar la instancia de Firebase
-    import { storage } from "../firebase"; // Ajusta la importación según tu configuración
+    import { ref } from "vue";
+    import { db } from "../firebase.js";
+    import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
+    import { storage } from "../firebase";
     import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+    import { useRouter } from "vue-router";
+    const router = useRouter();
     import {
         nombreSuperAdmin,
         photoUrlSuperAdmin,
         obtenerDatosSuperAdmin,
     } from "../loginFunctions";
-
-    import { useRouter } from "vue-router";
-
-    const router = useRouter();
 
     const cerrarSesion = () => {
         auth
@@ -35,10 +24,8 @@
             });
     };
 
-    const inputValue = ref("");
-
-    const file = ref(null);
-    const nuevoBufete = ref({
+    const bufeteIdToUpdate = ref("");
+    const bufeteDataToUpdate = ref({
         email: "",
         display_name: "",
         phone_number: "",
@@ -47,9 +34,9 @@
         photo_url: "", // Campo para almacenar la URL de la imagen
         // Agrega más campos según sea necesario
     });
-
-    // Comprueba si se ha seleccionado un archivo
-    const fileSelected = ref(false);
+    const file = ref(null); // Variable reactiva para almacenar el archivo seleccionado
+    const fileSelected = ref(false); // Variable reactiva para controlar si se ha seleccionado un archivo
+    const tempImageUrl = ref(null);
 
     // Función para manejar la selección de archivos
     const handleFileSelect = (event) => {
@@ -57,6 +44,9 @@
         if (selectedFile) {
             file.value = selectedFile;
             fileSelected.value = true;
+
+            // Crear una URL temporal para mostrar la imagen seleccionada
+            tempImageUrl.value = URL.createObjectURL(selectedFile);
         } else {
             file.value = null;
             fileSelected.value = false;
@@ -71,14 +61,14 @@
                 return;
             }
 
-            const fileRef = storageRef(storage, `fotos/bufetes/${file.value.name}`);
+            const fileRef = storageRef(storage, `fotos/Bufetes/${file.value.name}`);
             await uploadBytes(fileRef, file.value);
 
             // Ahora obtenemos la URL de descarga después de que el archivo se haya subido correctamente
             const photoURL = await getDownloadURL(fileRef);
 
-            // Agregar la URL de la imagen al campo photo_url del bufete
-            nuevoBufete.value.photo_url = photoURL;
+            // Agregar la URL de la imagen al campo photo_url del SuperAdmin
+            bufeteDataToUpdate.value.photo_url = photoURL;
 
             console.log("URL de la imagen:", photoURL);
         } catch (error) {
@@ -86,37 +76,31 @@
         }
     };
 
-    // Función para agregar un nuevo bufete a la colección "Bufetes"
-    const agregarNuevoBufete = async () => {
+    const actualizarBufete = async () => {
         try {
-            // Subir la imagen seleccionada antes de agregar el bufete
-            const querySnapshot = await getDocs(collection(db, "Bufetes"));
-            let ultimoId = 0;
-            querySnapshot.forEach((doc) => {
-                const bufete = doc.data();
-                if (bufete.Id_Bufete > ultimoId) {
-                    ultimoId = bufete.Id_Bufete;
-                }
-            });
+            const bufeteDocRef = doc(db, "Bufetes", bufeteIdToUpdate.value);
+            const bufeteDocSnap = await getDoc(bufeteDocRef);
 
-            // Incrementar el último id_Bufete para el nuevo bufete
-            const nuevoId = ultimoId + 1;
+            if (!bufeteDocSnap.exists()) {
+                console.error("No se encontró el bufete con el UID proporcionado");
+                return;
+            }
+
             await uploadFile();
-
-            // Crear el nuevo bufete con el nuevo id_Bufete y la fecha de creación
-            const nuevoBufeteConFecha = {
-                ...nuevoBufete.value,
-                Id_Bufete: nuevoId,
-                created_time: serverTimestamp(),
+            const bufeteData = bufeteDocSnap.data();
+            const newData = {
+                ...bufeteData,
+                ...bufeteDataToUpdate.value,
+                // Agrega más campos según sea necesario
+                fechaModificacion: serverTimestamp(), // Actualiza la fecha de modificación
             };
 
-            // Espera a que uidInputValue tenga un valor antes de continuar
+            await setDoc(bufeteDocRef, newData);
+            console.log("Bufete actualizado correctamente.");
 
-            // Agregar el nuevo bufete a la colección "Bufetes"
-            await setDoc(doc(db, "Bufetes", inputValue.value), nuevoBufeteConFecha);
-
-            // Limpiar el formulario después de agregar el bufete
-            nuevoBufete.value = {
+            // Limpiar el formulario después de actualizar el bufete
+            bufeteIdToUpdate.value = "";
+            bufeteDataToUpdate.value = {
                 email: "",
                 display_name: "",
                 phone_number: "",
@@ -126,13 +110,16 @@
                 // Agrega más campos según sea necesario
             };
 
-            // Mostrar Sweet Alert de éxito
-            swal("Éxito", "¡El bufete se agregó correctamente!", "success");
-
-            console.log("Bufete agregado exitosamente");
+            swal({
+                icon: "success",
+                title: "Bufete actualizado",
+            });
         } catch (error) {
-            console.error("Error al agregar el bufete:", error);
-            console.log(inputValue.value);
+            console.error("Error al actualizar el bufete:", error);
+            swal({
+                icon: "error",
+                title: "Error al actualizar el bufete",
+            });
         }
     };
 </script>
@@ -190,7 +177,7 @@
                     </router-link>
                     <h1
                         class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
-                        Agregar Bufete
+                        Actualizar Bufete
                     </h1>
                 </div>
                 <!-- <form @submit.prevent="agregarNuevoBufete" class="text-black">
@@ -216,54 +203,54 @@
                         <button type="submit" :disabled="!fileSelected">Agregar Bufete</button>
                     </form> -->
 
-                <form @submit.prevent="agregarNuevoBufete"
+                <form @submit.prevent="actualizarBufete"
                     class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-2xl p-2 gap-6">
                     <div class="flex flex-col gap-y-1">
-                        <label class="text-[85%] ml-1" for="" placeholder="">UID del bufete</label>
-                        <input type="text" v-model="inputValue" placeholder="Ingrese el UID"
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
-                    </div>
-
-                    <div>
-                        <label class="" for="">Correo</label>
-                        <input type="email" id="email" placeholder="Ej. bufete@gmail.com" v-model="nuevoBufete.email"
-                            required
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        <label class="text-[85%] ml-1" for="bufeteId">ID del bufete</label>
+                        <input type="text" id="bufeteId" v-model="bufeteIdToUpdate"
+                            placeholder="Ingrese el ID del bufete" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
                     <div>
-                        <label class="" for="">Nombre del bufete</label>
-                        <input type="text" id="display_name" placeholder="Ej. bufetesHN"
-                            v-model="nuevoBufete.display_name" required
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        <label class="" for="email">Correo</label>
+                        <input type="email" id="email" v-model="bufeteDataToUpdate.email"
+                            placeholder="Correo electrónico" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
-
                     <div>
-                        <label class="" for="">Telefono</label>
-                        <input type="tel" id="phone-number" placeholder="Ej. +504 2212-3456"
-                            v-model="nuevoBufete.phone_number" required pattern="\+504 \d{4}-\d{4}"
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
+                        <label class="" for="displayName">Nombre del bufete</label>
+                        <input type="text" id="displayName" v-model="bufeteDataToUpdate.display_name"
+                            placeholder="Nombre del bufete" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                    </div>
+                    <div>
+                        <label class="" for="phoneNumber">Número de teléfono</label>
+                        <input type="tel" id="phoneNumber" v-model="bufeteDataToUpdate.phone_number"
+                            placeholder="Número de teléfono" required pattern="\+504 \d{4}-\d{4}"
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
                             value="" inputmode="numeric" />
                     </div>
                     <div class="relative">
-                        <label class="" for="">Administrador</label>
-                        <input type="text" id="administrador" v-model="nuevoBufete.administrador" required
-                            placeholder="Nombre del administrador"
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        <label class="" for="administrador">Administrador</label>
+                        <input type="text" id="administrador" v-model="bufeteDataToUpdate.administrador"
+                            placeholder="Nombre del administrador" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
                     <div class="relative">
-                        <label class="" for="">Password temporal</label>
-                        <input type="text" id="ContrasenaAsesores" v-model="nuevoBufete.ContrasenaAsesores" required
-                            placeholder="password" autocomplete="off"
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        <label class="" for="contrasenaAsesores">Contraseña para asesores</label>
+                        <input type="password" id="contrasenaAsesores" v-model="bufeteDataToUpdate.ContrasenaAsesores"
+                            placeholder="Contraseña" autocomplete="off" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
                     <div class="relative col-span-2 mx-2">
-                        <label class="" for="">Logo del bufete</label>
-                        <input type="file" @change="handleFileSelect" accept="image/*"
-                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                        <label class="" for="photo">Foto del bufete</label>
+                        <input type="file" id="photo" @change="handleFileSelect" accept="image/*"
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
                     <div class="col-span-2 flex justify-center">
-                        <button class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
-                            Ingresar Datos
+                        <button type="submit"
+                            class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
+                            Actualizar Bufete
                         </button>
                     </div>
                 </form>
