@@ -150,31 +150,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/tramites"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 border-x-2 border-slate-400 opacity-30">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -187,70 +187,68 @@
             <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-center">
                 <div class="">
                     <router-link to="/sa"
-                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
+                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-8 text-2xl z-20 hover:scale-125">
                         <fa icon="fa-chevron-left fa-solid" />
                     </router-link>
                     <h1
-                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
+                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[42px] mt-4">
                         Administrador {{ nombreSuperAdmin }} {{ ApellidoSuperAdmin }}
                     </h1>
-                    <router-link to="/sa/perfil/actualizar"
-                        class="flex flex-col justify-center mx-4 mt-4 text-2xl ml-12 z-20 hover: opacity-70">
-                        <span> Editar Perfil</span>
-                    </router-link>
+                    <div class="flex justify-center">
+                        <router-link to="/sa/perfil/actualizar"
+                            class="flex flex-col justify-center mx-4 mt-4 text-2xl ml-12 z-20 hover:opacity-70 hover:shadow-md py-2 px-4 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-lg">
+                            <span>Editar Perfil</span>
+                        </router-link>
+                    </div>
                 </div>
-                <div class="grid flex-auto p-2 gap-20 mx-12 my-6">
+                <div class="grid flex-auto p-2 gap-20 mx-12 my-2">
                     <form @submit.prevent="guardarPerfil"
-                        class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl text-3xl p-2 gap-6">
-                        <div class="relative flex flex-col">
-                            <span>imagen actual</span>
-                            <img class="size-[150px] rounded-[50%]" :src="photoUrlSuperAdmin" alt="" />
+                        class="bg-bgdark w-full h-full text-pcd box-border relative grid grid-cols-2 rounded-2xl py-6 gap-8 text-3xl">
+                        <!-- Contenedor para la imagen de perfil -->
+                        <div class="relative flex flex-col items-center justify-center col-span-1 mb-8">
+                            <img class="size-[250px] rounded-full" :src="photoUrlSuperAdmin" alt="Foto de perfil" />
                         </div>
 
-                        <div class="flex flex-col gap-y-1">
-                            <label class="text-[85%] ml-1" for="">Nombre: </label>
-                            <h1>
-                                {{ nombreSuperAdmin }}
-                            </h1>
-                        </div>
+                        <!-- Campos de texto -->
+                        <div class="flex flex-col gap-y-4 col-span-1">
+                            <!-- Campo: Nombre -->
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-3xl font-italic text-gray-400" for="nombre">Nombre:</label>
+                                <h1 class="text-2xl text-white font-semibold">{{ nombreSuperAdmin }}</h1>
+                            </div>
 
-                        <div class="flex flex-col gap-y-1">
-                            <label class="text-[85%] ml-1" for="">Apellido: </label>
-                            <h1>
-                                {{ ApellidoSuperAdmin }}
-                            </h1>
-                        </div>
+                            <!-- Campo: Apellido -->
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-3xl font-italic text-gray-400" for="apellido">Apellido:</label>
+                                <h1 class="text-2xl text-white font-semibold">
+                                    {{ ApellidoSuperAdmin }}
+                                </h1>
+                            </div>
 
-                        <div class="flex flex-col gap-y-1">
-                            <label class="text-[85%] ml-1" for="">Miembro desde: </label>
-                            <h1>
-                                {{ fechaCreacionUsuario }}
-                            </h1>
-                        </div>
+                            <!-- Campo: Miembro desde -->
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-3xl font-italic text-gray-400" for="fechaCreacion">Miembro
+                                    desde:</label>
+                                <h1 class="text-2xl text-white font-semibold">
+                                    {{ fechaCreacionUsuario }}
+                                </h1>
+                            </div>
 
-                        <div class="flex flex-col gap-y-1">
-                            <label class="text-[85%] ml-1" for="">Ultima Actualización: </label>
-                            <h1>
-                                {{ perfilActualizado }}
-                            </h1>
-                        </div>
+                            <!-- Campo: Última Actualización -->
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-3xl font-italic text-gray-400" for="perfilActualizado">Última
+                                    Actualización:</label>
+                                <h1 class="text-2xl text-white font-semibold">
+                                    {{ perfilActualizado }}
+                                </h1>
+                            </div>
 
-                        <!-- <div class="relative">
-                            <label class="" for="">Correo</label>
-                            <input type="email" id="correo" required
-                                class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
-                        </div> -->
-                        <div class="flex flex-col gap-y-1">
-                            <label class="text-[85%] ml-1" for="">Correo: </label>
-                            <h1>
-                                {{ correoSuperAdmin }}
-                            </h1>
+                            <!-- Campo: Correo -->
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-3xl font-italic text-gray-400" for="correo">Correo:</label>
+                                <h1 class="text-2xl text-white font-semibold">{{ correoSuperAdmin }}</h1>
+                            </div>
                         </div>
-
-                        <!-- <div class="p-1 col-span-2">
-                    <input type="file"
-                        class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-3xlfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                </div> -->
                     </form>
                 </div>
             </div>

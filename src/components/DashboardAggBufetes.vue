@@ -1,4 +1,5 @@
 <script setup>
+    import Swal from "sweetalert2";
     import { ref, watchEffect } from "vue";
     import { db, auth } from "../firebase.js";
     import { onAuthStateChanged } from "firebase/auth";
@@ -41,8 +42,7 @@
     const nuevoBufete = ref({
         email: "",
         display_name: "",
-        phone_number: "",
-        ContrasenaAsesores: "",
+        ContrasenaAsesores: "YXNkMTIz",
         administrador: "",
         photo_url: "", // Campo para almacenar la URL de la imagen
         // Agrega más campos según sea necesario
@@ -94,8 +94,8 @@
             let ultimoId = 0;
             querySnapshot.forEach((doc) => {
                 const bufete = doc.data();
-                if (bufete.Id_Bufete > ultimoId) {
-                    ultimoId = bufete.Id_Bufete;
+                if (bufete.idBufete > ultimoId) {
+                    ultimoId = bufete.idBufete;
                 }
             });
 
@@ -106,11 +106,9 @@
             // Crear el nuevo bufete con el nuevo id_Bufete y la fecha de creación
             const nuevoBufeteConFecha = {
                 ...nuevoBufete.value,
-                Id_Bufete: nuevoId,
+                idBufete: nuevoId,
                 created_time: serverTimestamp(),
             };
-
-            // Espera a que uidInputValue tenga un valor antes de continuar
 
             // Agregar el nuevo bufete a la colección "Bufetes"
             await setDoc(doc(db, "Bufetes", inputValue.value), nuevoBufeteConFecha);
@@ -119,20 +117,18 @@
             nuevoBufete.value = {
                 email: "",
                 display_name: "",
-                phone_number: "",
-                ContrasenaAsesores: "",
+                ContrasenaAsesores: "YXNkMTIz",
                 administrador: "",
                 photo_url: "",
-                // Agrega más campos según sea necesario
             };
 
             // Mostrar Sweet Alert de éxito
-            swal("Éxito", "¡El bufete se agregó correctamente!", "success");
+            Swal.fire("Éxito", "¡El bufete se agregó correctamente!", "success");
 
             console.log("Bufete agregado exitosamente");
         } catch (error) {
             console.error("Error al agregar el bufete:", error);
-            console.log(inputValue.value);
+            Swal.fire("Error", "Hubo un problema al agregar el bufete", "error");
         }
     };
 </script>
@@ -148,31 +144,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes" class="flex flex-col justify-center m-4">
                         <button
-                            class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 border-x-2 border-slate-400 opacity-30">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/tramites"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -237,26 +233,27 @@
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <label class="" for="">Telefono</label>
                         <input type="tel" id="phone-number" placeholder="Ej. +504 2212-3456"
                             v-model="nuevoBufete.phone_number" required pattern="\+504 \d{4}-\d{4}"
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
                             value="" inputmode="numeric" />
-                    </div>
+                    </div> -->
                     <div class="relative">
-                        <label class="" for="">Administrador</label>
+                        <label class="" for="administrador">Administrador</label>
                         <input type="text" id="administrador" v-model="nuevoBufete.administrador" required
-                            placeholder="Nombre del administrador"
+                            placeholder="Nombre del administrador" pattern="[a-zA-Z\s]+"
+                            title="Solo se permiten letras del abecedario"
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                     </div>
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <label class="" for="">Password temporal</label>
                         <input type="text" id="ContrasenaAsesores" v-model="nuevoBufete.ContrasenaAsesores" required
                             placeholder="password" autocomplete="off"
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
-                    </div>
-                    <div class="relative col-span-2 mx-2">
+                    </div> -->
+                    <div class="relative col-span-1 mx-2">
                         <label class="" for="">Logo del bufete</label>
                         <input type="file" @change="handleFileSelect" accept="image/*"
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />

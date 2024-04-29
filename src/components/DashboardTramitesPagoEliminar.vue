@@ -139,31 +139,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center m-4">
                         <button
                             class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -174,22 +174,19 @@
         <!-- Contenido principal -->
         <main class="flex-1 p-4 box-border">
             <div
-                class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-start overflow-y-auto">
-                <div class="">
-                    <router-link to="/sa/bufetes"
-                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
-                        <fa icon="fa-chevron-left fa-solid" />
+                class="bg-bgdark w-full h-full opacity-55 text-white relative flex flex-col justify-center items-center overflow-y-auto">
+                <div class="w-full text-center titulo absolute top-0">
+                    <router-link to="/sa/tramites/pago" class="absolute left-0 mt-4 z-20 hover:scale-125 ml-2">
+                        <fa icon="fa-chevron-left fa-solid" class="text-2xl" />
                     </router-link>
-                    <h1
-                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
-                        Eliminar Trámite
-                    </h1>
+                    <h1 class="text-4xl mt-2">Eliminar Tramite de Pago</h1>
                 </div>
-                <div>
-                    <h2>Eliminar Trámite</h2>
-                    <input v-model="tramiteIdToDelete" placeholder="Ingrese el UID del trámite a eliminar" />
+                <div class="flex flex-col items-center bg-bgblue p-8 rounded-xl shadow-2xl shadow-bgblue opacity-85">
+                    <h2 class="text-2xl mb-4">Eliminar Tramite</h2>
+                    <input v-model="tramiteIdToDelete" placeholder="Ingrese el UID del tramite a eliminar"
+                        class="w-80 bg-white text-black rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <button @click="confirmarEliminacionTramite"
-                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600">
                         Eliminar
                     </button>
                 </div>

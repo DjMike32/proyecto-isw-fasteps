@@ -1,5 +1,5 @@
 <script setup>
-    import swal from "sweetalert";
+    import Swal from "sweetalert2";
     import { eliminarUsuario } from "../main";
     import { onMounted } from "vue";
     import { RouterLink } from "vue-router";
@@ -30,6 +30,16 @@
             .catch((error) => {
                 console.error("Error al cerrar sesión:", error);
             });
+    };
+
+    const showModal = () => {
+        Swal.fire({
+            icon: "info",
+            title: "Botón Deshabilitado Temporalmente",
+            text: "Este botón ha sido deshabilitado temporalmente.",
+            confirmButtonText: "Entendido",
+            confirmButtonColor: "#3085d6",
+        });
     };
 
     // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
@@ -91,34 +101,34 @@
                         Tramites Gratuitos
                     </h1>
                 </div>
-                <div class="grid flex-auto p-2 grid-cols-2 gap-20 mx-12 my-6">
-                    <router-link
-                        class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
+                <div class="grid flex-auto p-2 grid-cols-2 gap-20 mx-12 my-6" id="button-container">
+                    <router-link id="btn-agregar"
+                        class="bg-pcb rounded-xl shadow-2xl router-link shadow-bgblue text-3xl flex flex-col items-center justify-center hover:scale-110 hover:opacity-100"
                         to="/sa/tramites/gratis/agregar">
                         <fa icon="fa-plus fa-solid" class="text-white" />
                         <h2 class="text-white">Agregar</h2>
                     </router-link>
 
-                    <router-link
-                        class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
+                    <router-link id="btn-eliminar"
+                        class="bg-pcb rounded-xl shadow-2xl router-link shadow-bgblue text-3xl flex flex-col items-center justify-center hover:scale-110 hover:opacity-100"
                         to="/sa/tramites/gratis/eliminar">
                         <fa icon="fa-trash fa-solid" />
                         <h2>Eliminar</h2>
                     </router-link>
 
-                    <router-link
-                        class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
+                    <router-link id="btn-buscar"
+                        class="bg-pcb rounded-xl shadow-2xl router-link shadow-bgblue text-3xl flex flex-col items-center justify-center hover:scale-110 hover:opacity-100"
                         to="/sa/tramites/gratis/buscar">
                         <fa icon="fa-magnifying-glass fa-solid" />
                         <h2>Buscar</h2>
                     </router-link>
 
-                    <router-link
-                        class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-                        to="/sa/tramites/gratis/agregar">
+                    <button id="btn-actualizar"
+                        class="bg-pcb rounded-xl shadow-2xl router-link shadow-bgblue text-3xl flex flex-col items-center justify-center hover:scale-110 hover:opacity-100"
+                        @click="showModal">
                         <fa icon="fa-pen fa-solid" />
                         <h2>Actualizar</h2>
-                    </router-link>
+                    </button>
                 </div>
             </div>
         </main>
@@ -134,3 +144,9 @@
         <button class="w-1/3 h-8 text-sm bg-red-200" @click="agregarUsuario('pedro', 'josue')">agregar</button>
     </div> -->
 </template>
+
+<style scoped>
+    .router-link:not(:hover) {
+        opacity: 0.7;
+    }
+</style>

@@ -61,6 +61,7 @@
         }
     };
 
+    const showCopyIcon = ref(false);
     onMounted(() => {
         loadTramites();
     });
@@ -77,9 +78,11 @@
             .writeText(uid)
             .then(() => {
                 console.log("UID copiado al portapapeles:", uid);
+                // Aquí podrías mostrar algún mensaje de éxito o realizar otras acciones si lo deseas
             })
             .catch((error) => {
                 console.error("Error al copiar UID:", error);
+                // Manejar el error si la copia falla
             });
     };
 
@@ -159,7 +162,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(tramite, index) in filteredTramites" :key="tramite.id"
-                                    :class="{ '#29353c': index % 2 === 0, '#29353c': index % 2 !== 0 }">
+                                    :class="{ 'even-row': index % 2 === 0, 'odd-row': index % 2 !== 0 }">
                                     <td>{{ tramite.Nombre }}</td>
                                     <td>{{ tramite.Descripcion }}</td>
                                     <td>
@@ -201,8 +204,11 @@
                                         <img :src="tramite.Img_Presentacion" alt="Imagen de Presentación"
                                             style="max-width: 100px; max-height: 100px" />
                                     </td>
-                                    <td>
-                                        <button @click="copiarUID(tramite.id)">Copiar UID</button>
+                                    <td @mouseenter="showCopyIcon = true" @mouseleave="showCopyIcon = false">
+                                        <span @click="copiarUID(tramite.id)" style="cursor: pointer">
+                                            <fa v-if="showCopyIcon" icon="fa-copy fa-solid"
+                                                class="text-xl text-center" />
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -253,5 +259,17 @@
 
     .bg-white {
         background-color: rgb(38, 38, 61);
+    }
+
+    .even-row {
+        background-color: #44576d;
+    }
+
+    .odd-row {
+        background-color: #374357;
+    }
+
+    .hover-opacity:hover {
+        opacity: 0.8;
     }
 </style>

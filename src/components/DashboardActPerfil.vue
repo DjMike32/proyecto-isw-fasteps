@@ -207,31 +207,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/tramites"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 border-x-2 border-slate-400 opacity-30">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -244,8 +244,8 @@
             <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-center">
                 <div class="">
                     <router-link to="/sa/perfil/ver"
-                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
-                        <fa icon="fa-chevron-left fa-solid" />
+                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-8 text-2xl z-20 hover:scale-125">
+                        <fa icon="fa-chevron-left fa-solid mt-8" />
                     </router-link>
                     <h1
                         class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
@@ -259,35 +259,14 @@
                         <div class="flex flex-col gap-y-1">
                             <label class="text-[85%] ml-1" for="">Nombre: </label>
                             <input type="text" :placeholder="nombreSuperAdmin" id="nombre" v-model="perfil.nombre"
-                                required
+                                required pattern="[A-Za-z]+" title="Ingrese solo letras"
                                 class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                         </div>
-                        <!-- <div>
-                            <label class="" for="">Direccion del bufete</label>
-                            <div class="select-container relative">
-                                <select
-                                    class="w-full p-1 text-pce italic bg-gray-800 placeholder-italic placeholder-text-white placeholder-opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2 overflow-y-auto max-h-40">
-                                    <option value="san-pedro-sula">San Pedro Sula</option>
-                                    <option value="tegucigalpa">Tegucigalpa</option>
-                                    <option value="la-ceiba">La Ceiba</option>
-                                    <option value="san-pedro-sula">San Pedro Sula</option>
-                                    <option value="tegucigalpa">Tegucigalpa</option>
-                                    <option value="la-ceiba">La Ceiba</option>
-                                    <option value="san-pedro-sula">San Pedro Sula</option>
-                                    <option value="la-ceiba">La Ceiba</option>
-                                    <option value="san-pedro-sula">San Pedro Sula</option>
-                                    <option value="tegucigalpa">Tegucigalpa</option>
-                                    <option value="la-ceiba">La Ceiba</option>
-                                    <option value="san-pedro-sula">San Pedro Sula</option>
 
-                                    
-                                </select>
-                            </div>
-                        </div> -->
                         <div class="flex flex-col gap-y-1">
                             <label class="text-[85%] ml-1" for="">Apellido: </label>
                             <input type="text" :placeholder="ApellidoSuperAdmin" id="apellido" v-model="perfil.apellido"
-                                required
+                                required pattern="[A-Za-z]+" title="Ingrese solo letras"
                                 class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
                         </div>
                         <!-- <div>
@@ -321,12 +300,8 @@
                         <input type="file" id="input-file" style="display: none" @change="handleFileSelect"
                             accept="image/*" />
 
-                        <!-- <div class="p-1 col-span-2">
-                    <input type="file"
-                        class="w-full text-sm text-slate-500 file:py-2 file:rounded-full file:border-0 file:text-3xlfile:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                </div> -->
-
-                        <button type="submit" class="col-span-2 bg-bgdark" :disabled="!fileSelected">
+                        <button class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg col-span-2"
+                            :disabled="!fileSelected">
                             Guardar Perfil
                         </button>
                     </form>

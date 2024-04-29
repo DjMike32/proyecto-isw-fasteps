@@ -1,5 +1,5 @@
 <script setup>
-  import swal from "sweetalert";
+  import Swal from "sweetalert2";
   import { eliminarUsuario } from "../main";
   import { onMounted } from "vue";
   import { RouterLink } from "vue-router";
@@ -32,6 +32,16 @@
       });
   };
 
+  const showModal = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Botón Deshabilitado Temporalmente",
+      text: "Este botón ha sido deshabilitado temporalmente.",
+      confirmButtonText: "Entendido",
+      confirmButtonColor: "#3085d6",
+    });
+  };
+
   // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
@@ -45,30 +55,29 @@
             {{ nombreSuperAdmin }}
           </h1>
         </div>
-        <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-          <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-            <button class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+        <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+          <router-link to="/sa/bufetes" class="flex flex-col justify-center m-4">
+            <button class="flex flex-col items-center w-full text-3xl space-y-3 border-x-2 border-slate-400 opacity-30">
               <fa icon="fa-user-tie fa-solid" />
               <h2>Bufetes</h2>
             </button>
           </router-link>
-          <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-            <button
-              class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+          <router-link to="/sa/tramites"
+            class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+            <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
               <fa icon="fa-file-signature fa-solid" />
               <h2>Tramites</h2>
             </button>
           </router-link>
-          <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
-            <button
-              class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+          <router-link to="/sa/perfil/ver"
+            class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+            <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
               <fa icon="fa-id-card fa-solid" />
               <h2>Perfil</h2>
             </button>
           </router-link>
-          <a class="flex flex-col justify-center mx-4">
-            <button @click="cerrarSesion"
-              class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+          <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+            <button @click="cerrarSesion" class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
               <fa icon="fa-right-from-bracket fa-solid" />
               <h2>Cerrar Sesión</h2>
             </button>
@@ -111,12 +120,12 @@
             <h2>Buscar</h2>
           </router-link>
 
-          <router-link
-            class="bg-pcb rounded-xl shadow-2xl shadow-bgblue text-3xl hover:opacity-50 flex flex-col items-center justify-center"
-            to="/sa/bufetes/actualizar">
+          <button id="btn-actualizar"
+            class="bg-pcb rounded-xl shadow-2xl router-link shadow-bgblue text-3xl flex flex-col items-center justify-center hover:scale-110 hover:opacity-100"
+            @click="showModal">
             <fa icon="fa-pen fa-solid" />
             <h2>Actualizar</h2>
-          </router-link>
+          </button>
         </div>
       </div>
     </main>

@@ -22,6 +22,7 @@
     const nuevoTramite = ref({
         id_Tramite: null,
         Descripcion: "",
+        Precio: "",
         Doc_Necesaria: "",
         Nombre: "",
         Pasos: [],
@@ -37,6 +38,11 @@
     const agregarPaso = () => {
         nuevoTramite.value.Pasos.push("");
     };
+
+    function validarPrecio(event) {
+        // Eliminar cualquier caracter que no sea un número
+        nuevoTramite.value.Precio = event.target.value.replace(/\D/g, "");
+    }
 
     // Función para manejar la selección de archivos
     const handleFileSelect = (event) => {
@@ -90,7 +96,8 @@
                 (tipo) => tipo.id === selectedTipoCertificacionRef.value
             );
             if (tipoCertificacionSeleccionado) {
-                return `/TipoCertificacion/${selectedTipoCertificacionRef.value}`;
+                // Construir la referencia al documento en Firestore
+                return doc(db, "TipoCertificacion", selectedTipoCertificacionRef.value);
             }
         }
         console.error("Seleccione un tipo de certificación antes de mostrar la referencia.");
@@ -112,11 +119,7 @@
 
                 // Obtener el último ID de trámite almacenado en la colección
                 const lastTramiteSnapshot = await getDocs(
-                    query(
-                        collection(db, "Tramites_Gratuitos"),
-                        orderBy("id_Tramite", "desc"),
-                        limit(1)
-                    )
+                    query(collection(db, "Tipo_Tramite"), orderBy("id_Tramite", "desc"), limit(1))
                 );
                 let lastTramiteId = 0;
                 lastTramiteSnapshot.forEach((doc) => {
@@ -125,6 +128,7 @@
 
                 // Incrementar el ID para el nuevo trámite
                 nuevoTramite.value.id_Tramite = lastTramiteId + 1;
+                nuevoTramite.value.Precio = parseFloat(nuevoTramite.value.Precio);
 
                 // Agregar el nuevo trámite a la colección "Tramites_Gratuitos"
                 const docRef = await addDoc(collection(db, "Tipo_Tramite"), nuevoTramite.value);
@@ -134,6 +138,7 @@
                 nuevoTramite.value = {
                     id_Tramite: null,
                     Descripcion: "",
+                    Precio: "",
                     Doc_Necesaria: "",
                     Nombre: "",
                     Pasos: [],
@@ -168,7 +173,11 @@
                 // Obtiene el Uid del documento TipoCertificacion
                 const uid = tipoCertificacionSnap.id;
                 // Formatea la cadena con el Uid y el tipo de certificación
-                const certificacionNecesaria = `/TipoCertificacion/${selectedTipoCertificacionRef.value}`;
+                const certificacionNecesariaRef = doc(
+                    db,
+                    "TipoCertificacion",
+                    selectedTipoCertificacionRef.value
+                );
 
                 // Asigna el valor formateado al campo CertificacionNecesaria del nuevo trámite
                 nuevoTramite.value.CertificacionNecesaria = certificacionNecesaria;
@@ -192,31 +201,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover:border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center m-4">
                         <button
                             class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -263,13 +272,18 @@
                         </button>
                     </div>
 
-                    <div class="col-span-2">
+                    <div class="col-span-1">
                         <label for="descripcion">Descripción</label>
                         <textarea id="descripcion" v-model="nuevoTramite.Descripcion"
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2"
                             required></textarea>
                     </div>
 
+                    <div>
+                        <label for="precio">Precio del tramite</label>
+                        <input type="text" id="precio" v-model="nuevoTramite.Precio" @input="validarPrecio" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                    </div>
                     <div>
                         <label for="doc_necesaria">Documento Necesario</label>
                         <input type="text" id="doc_necesaria" v-model="nuevoTramite.Doc_Necesaria" required
@@ -302,23 +316,24 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-span-2 flex justify-center">
+                    <!-- <div class="col-span-2 flex justify-center">
                         <button @click="agregarPaso"
                             class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
                             Agregar Pasos
+                            <fa icon="fa-plus fa-solid" />
                         </button>
                     </div>
                     <div class="col-span-1" v-for="(paso, index) in nuevoTramite.Pasos" :key="index">
                         <label :for="'paso_' + index">Paso {{ index + 1 }}</label>
                         <input type="text" :id="'paso_' + index" v-model="nuevoTramite.Pasos[index]" required
                             class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Input para los pasos -->
 
                     <div class="col-span-2 flex justify-center">
                         <button type="submit"
-                            class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
+                            class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg flex items-center">
                             Agregar Trámite
                         </button>
                     </div>

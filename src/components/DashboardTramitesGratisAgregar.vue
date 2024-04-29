@@ -1,8 +1,14 @@
 <script setup>
+    import Swal from "sweetalert2";
     import { ref } from "vue";
     import { db, storage } from "../firebase";
     import { collection, addDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
     import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+    import {
+        nombreSuperAdmin,
+        photoUrlSuperAdmin,
+        obtenerDatosSuperAdmin,
+    } from "../loginFunctions";
 
     const nuevoTramite = ref({
         id_Tramite: null,
@@ -46,6 +52,12 @@
                 Pasos: [],
                 Img_Presentacion: "", // Limpiar el campo de la URL de la imagen
             };
+
+            // Mostrar Sweet Alert de éxito
+            Swal.fire({
+                title: "¡Trámite agregado exitosamente!",
+                icon: "success",
+            });
 
             console.log("Trámite agregado exitosamente");
         } catch (error) {
@@ -98,33 +110,106 @@
 </script>
 
 <template>
-    <form @submit.prevent="agregarNuevoTramite">
-        <div>
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" v-model="nuevoTramite.Descripcion" required></textarea>
-        </div>
-        <div>
-            <label for="doc_necesaria">Documento Necesario</label>
-            <input type="text" id="doc_necesaria" v-model="nuevoTramite.Doc_Necesaria" required />
-        </div>
-        <div>
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" v-model="nuevoTramite.Nombre" required />
-        </div>
-        <!-- Input para la imagen -->
-        <div>
-            <label for="img_presentacion">Imagen de Presentación</label>
-            <input type="file" id="img_presentacion" @change="handleFileSelect" accept="image/*" required />
-            <!-- Vista previa de la imagen seleccionada -->
-            <img v-if="tempImageUrl" :src="tempImageUrl" alt="Imagen de Presentación"
-                style="max-width: 300px; max-height: 300px" />
-        </div>
-        <!-- Input para los pasos -->
-        <div v-for="(paso, index) in nuevoTramite.Pasos" :key="index">
-            <label :for="'paso_' + index">Paso {{ index + 1 }}</label>
-            <input type="text" :id="'paso_' + index" v-model="nuevoTramite.Pasos[index]" required />
-        </div>
-        <button type="button" @click="agregarPaso">Agregar Paso</button>
-        <button type="submit">Agregar Trámite</button>
-    </form>
+    <div class="flex h-screen bg-bgblue">
+        <aside class="w-1/4 bg-bgblue opacity-65 text-white border-r-[0.5px] border-white my-4">
+            <div class="flex h-full flex-col justify-center">
+                <div
+                    class="basis-1/12 bg-[#eeeeee1b] grid grid-flow-col justify-start mx-8 rounded-xl items-center mb-4">
+                    <img class="rounded-full size-[65px] -ml-2" :src="photoUrlSuperAdmin" alt="" />
+                    <h1 class="text-3xl font-bold text-white text-center ml-4">
+                        {{ nombreSuperAdmin }}
+                    </h1>
+                </div>
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
+                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover:border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            <fa icon="fa-user-tie fa-solid" />
+                            <h2>Bufetes</h2>
+                        </button>
+                    </router-link>
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+                            <fa icon="fa-file-signature fa-solid" />
+                            <h2>Tramites</h2>
+                        </button>
+                    </router-link>
+                    <router-link to="/sa/actualizar" class="flex flex-col justify-center mx-4">
+                        <button
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            <fa icon="fa-id-card fa-solid" />
+                            <h2>Perfil</h2>
+                        </button>
+                    </router-link>
+                    <a class="flex flex-col justify-center mx-4">
+                        <button @click="cerrarSesion"
+                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            <fa icon="fa-right-from-bracket fa-solid" />
+                            <h2>Cerrar Sesión</h2>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <!-- Contenido principal -->
+        <main class="flex-1 p-4 box-border">
+            <div
+                class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-start overflow-y-auto">
+                <div class="mx-4 mt-8 flex flex-row">
+                    <router-link to="/sa/tramites/gratis"
+                        class="flex flex-col justify-center text-2xl z-20 hover:scale-125">
+                        <fa icon="fa-chevron-left fa-solid" class="text-white" />
+                    </router-link>
+                    <h1 class="text-center text-3xl mt-2 inline-block ml-14">
+                        Agregar Trámite Gratuito
+                    </h1>
+                </div>
+                <form @submit.prevent="agregarNuevoTramite" class="bg-bgdark p-4 rounded-lg shadow-lg grid-cols-2">
+                    <div class="mb-4 col-span-1">
+                        <label for="descripcion" class="block text-white mb-1">Descripción</label>
+                        <textarea id="descripcion" v-model="nuevoTramite.Descripcion" required
+                            class="w-full p-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0"
+                            rows="4"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="doc_necesaria" class="block text-white mb-1">Documento Necesario</label>
+                        <input type="text" id="doc_necesaria" v-model="nuevoTramite.Doc_Necesaria" required
+                            class="w-full p-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="nombre" class="block text-white mb-1">Nombre</label>
+                        <input type="text" id="nombre" v-model="nuevoTramite.Nombre" required
+                            class="w-full p-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0" />
+                    </div>
+                    <!-- Input para la imagen -->
+                    <div class="mb-4">
+                        <label for="img_presentacion" class="block text-white mb-1">Imagen de Presentación</label>
+                        <input type="file" id="img_presentacion" @change="handleFileSelect" accept="image/*" required
+                            class="w-full p-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0" />
+                        <!-- Vista previa de la imagen seleccionada -->
+                        <img v-if="tempImageUrl" :src="tempImageUrl" alt="Imagen de Presentación"
+                            class="mt-2 max-w-full max-h-32" />
+                    </div>
+                    <!-- Input para los pasos -->
+                    <div class="col-span-2 flex justify-center">
+                        <button @click="agregarPaso"
+                            class="bg-gray-800 hover:bg-gray-700 text-pcd font-bold py-2 px-4 rounded-lg">
+                            Agregar Pasos
+                            <fa icon="fa-plus fa-solid" />
+                        </button>
+                    </div>
+                    <div class="col-span-1" v-for="(paso, index) in nuevoTramite.Pasos" :key="index">
+                        <label :for="'paso_' + index">Paso {{ index + 1 }}</label>
+                        <input type="text" :id="'paso_' + index" v-model="nuevoTramite.Pasos[index]" required
+                            class="w-full p-1 text-pce bg-gray-800 placeholder:italic placeholder:text-white placeholder:opacity-70 rounded-lg focus:outline-none focus:border-white focus:ring-1 focus:ring-white border-0 pl-2" />
+                    </div>
+                    <button type="submit"
+                        class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg mt-4">
+                        Agregar Trámite
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
 </template>

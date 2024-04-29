@@ -55,10 +55,15 @@
             );
         }
     };
+
+    const showCopyIcon = ref(false);
+
     // Cargar bufetes cuando el componente esté montado
     onMounted(() => {
         loadBufetes();
     });
+
+    const rowData = ref({ showCopyIcon: false });
 
     // Escuchar cambios en el término de búsqueda y filtrar bufetes
     watch(searchTerm, () => {
@@ -101,6 +106,7 @@
                 // Manejar el error si la copia falla
             });
     };
+
     // Llama a la función successAlert dentro de onMounted para garantizar que el DOM se haya cargado completamente
 </script>
 
@@ -115,31 +121,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes" class="flex flex-col justify-center m-4">
                         <button
-                            class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 border-x-2 border-slate-400 opacity-30">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/tramites"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -157,45 +163,45 @@
                     </router-link>
                     <h1
                         class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
-                        Buscar Bufetes
+                        Bufetes
                     </h1>
                 </div>
-                <div>
-                    <h2>Lista de Bufetes</h2>
-                    <input type="text" v-model="searchTerm" placeholder="Buscar por nombre" />
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre del Bufete</th>
-                                <th>Correo</th>
-                                <th>Teléfono</th>
-                                <th>Administrador</th>
-                                <th>Password Temporal</th>
-                                <th>Imagen</th>
-                                <th>UID</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="bufete in filteredBufetes" :key="bufete.id"
-                                :class="index % 2 === 0 ? 'even-row' : 'odd-row'" :hover="hover - opacity">
-                                <td>{{ bufete.display_name }}</td>
-                                <td>{{ bufete.email }}</td>
-                                <td>{{ bufete.phone_number }}</td>
-                                <td>{{ bufete.administrador }}</td>
-                                <td>{{ bufete.ContrasenaAsesores }}</td>
-                                <td>
-                                    <img :src="bufete.photo_url" alt="Imagen del Bufete"
-                                        style="max-width: 100px; max-height: 100px" />
-                                </td>
-                                <td>
-                                    <span @click="copiarUID(bufete.id)"
-                                        style="cursor: pointer; color: blue; text-decoration: underline">
-                                        Copiar UID
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="grid flex-auto p-2 scroll-container">
+                    <div>
+                        <input type="text" v-model="searchTerm" placeholder="Buscar bufete..."
+                            class="sticky-input text-black" />
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="sticky-header">Nombre del Bufete</th>
+                                    <th class="sticky-header">Correo</th>
+                                    <th class="sticky-header">Administrador</th>
+                                    <th class="sticky-header">Password Temporal</th>
+                                    <th class="sticky-header">Imagen</th>
+                                    <th class="sticky-header">UID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(bufete, index) in filteredBufetes" :key="bufete.id"
+                                    :class="index % 2 === 0 ? 'even-row' : 'odd-row'" :hover="hover - opacity">
+                                    <td>{{ bufete.display_name }}</td>
+                                    <td>{{ bufete.email }}</td>
+                                    <td>{{ bufete.administrador }}</td>
+                                    <td>{{ bufete.ContrasenaAsesores }}</td>
+                                    <td>
+                                        <img :src="bufete.photo_url" alt="Imagen del Bufete"
+                                            style="max-width: 100px; max-height: 100px" />
+                                    </td>
+
+                                    <td @mouseenter="showCopyIcon = true" @mouseleave="showCopyIcon = false">
+                                        <span @click="copiarUID(bufete.id)" style="cursor: pointer">
+                                            <fa v-if="showCopyIcon" icon="fa-copy fa-solid" class="text-xl" />
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
@@ -255,11 +261,11 @@
     }
 
     .even-row {
-        background-color: #0e2d52;
+        background-color: #44576d;
     }
 
     .odd-row {
-        background-color: #44576d;
+        background-color: #374357;
     }
 
     .hover-opacity:hover {

@@ -48,6 +48,7 @@
     };
 
     const filteredTramites = ref([]);
+    const showCopyIcon = ref(false);
 
     const filterTramites = () => {
         if (!searchTerm.value) {
@@ -77,9 +78,11 @@
             .writeText(uid)
             .then(() => {
                 console.log("UID copiado al portapapeles:", uid);
+                // Aquí podrías mostrar algún mensaje de éxito o realizar otras acciones si lo deseas
             })
             .catch((error) => {
                 console.error("Error al copiar UID:", error);
+                // Manejar el error si la copia falla
             });
     };
 
@@ -97,31 +100,31 @@
                         {{ nombreSuperAdmin }}
                     </h1>
                 </div>
-                <div class="basis-11/12 grid grid-flow-row grid-rows-4">
-                    <router-link to="/sa/bufetes" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                <div class="basis-11/12 grid grid-flow-row grid-rows-4 text-2xl">
+                    <router-link to="/sa/bufetes"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-user-tie fa-solid" />
                             <h2>Bufetes</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/tramites" class="flex flex-col justify-center mx-4">
+                    <router-link to="/sa/tramites" class="flex flex-col justify-center m-4">
                         <button
                             class="flex flex-col items-center w-full border-slate-400 border-x-2 text-3xl space-y-3 opacity-30">
                             <fa icon="fa-file-signature fa-solid" />
                             <h2>Tramites</h2>
                         </button>
                     </router-link>
-                    <router-link to="/sa/perfil/ver" class="flex flex-col justify-center mx-4">
-                        <button
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                    <router-link to="/sa/perfil/ver"
+                        class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
+                        <button class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-id-card fa-solid" />
                             <h2>Perfil</h2>
                         </button>
                     </router-link>
-                    <a class="flex flex-col justify-center mx-4">
+                    <a class="flex flex-col justify-center m-4 hover:border-x-2 hover:border-slate-400">
                         <button @click="cerrarSesion"
-                            class="flex flex-col items-center w-full hover: border-slate-400 hover:border-x-2 text-3xl space-y-3">
+                            class="flex flex-col items-center w-full text-3xl space-y-3 hover:scale-110">
                             <fa icon="fa-right-from-bracket fa-solid" />
                             <h2>Cerrar Sesión</h2>
                         </button>
@@ -133,7 +136,7 @@
         <main class="flex-1 p-4 box-border">
             <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-start">
                 <div class="">
-                    <router-link to="/sa/tramites/gratis"
+                    <router-link to="/sa/tramites/pago"
                         class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
                         <fa icon="fa-chevron-left fa-solid" />
                     </router-link>
@@ -166,8 +169,11 @@
                                         <img :src="tramite.Img_Presentacion" alt="Imagen de Presentación"
                                             style="max-width: 100px; max-height: 100px" />
                                     </td>
-                                    <td>
-                                        <button @click="copiarUID(tramite.id)">Copiar UID</button>
+                                    <td @mouseenter="showCopyIcon = true" @mouseleave="showCopyIcon = false">
+                                        <span @click="copiarUID(tramite.id)" style="cursor: pointer">
+                                            <fa v-if="showCopyIcon" icon="fa-copy fa-solid"
+                                                class="text-xl text-center" />
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>

@@ -15,6 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "animate.css": "^4.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "firebase": "^10.10.0",
     "git": "^0.1.5",

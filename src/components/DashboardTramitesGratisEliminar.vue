@@ -38,12 +38,12 @@
             const docSnap = await getDoc(docRef);
 
             if (!docSnap.exists()) {
-                throw new Error("No se encontró el bufete con el UID proporcionado");
+                throw new Error("No se encontró el tramite con el UID proporcionado");
             }
 
             const tramiteData = docSnap.data();
             const confirmacion = await Swal.fire({
-                title: `¿Seguro que deseas eliminar el bufete "${tramiteData.Nombre}"?`,
+                title: `¿Seguro que deseas eliminar el tramite de "${tramiteData.Nombre}"?`,
                 text: "Esta acción no se puede deshacer",
                 icon: "warning",
                 showCancelButton: true,
@@ -54,12 +54,12 @@
 
             if (confirmacion.isConfirmed) {
                 await deleteDoc(docRef);
-                Swal.fire("Eliminado", "El bufete ha sido eliminado correctamente", "success");
+                Swal.fire("Eliminado", "El tramite ha sido eliminado correctamente", "success");
                 bufeteIdToDelete = ""; // Limpiar el input después de la eliminación
             }
         } catch (error) {
             console.error("Error al eliminar el bufete:", error);
-            Swal.fire("Error", "Hubo un problema al eliminar el bufete", "error");
+            Swal.fire("Error", "Hubo un problema al eliminar el tramite", "error");
         }
     };
 </script>
@@ -109,22 +109,20 @@
         </aside>
         <!-- Contenido principal -->
         <main class="flex-1 p-4 box-border">
-            <div class="bg-bgdark w-full h-full opacity-55 text-white box-border relative flex flex-col justify-start">
-                <div class="">
-                    <router-link to="/sa/tramites/gratis"
-                        class="flex flex-col justify-center mx-4 absolute ml-8 mt-4 text-2xl z-20 hover:scale-125">
-                        <fa icon="fa-chevron-left fa-solid" />
+            <div
+                class="bg-bgdark w-full h-full opacity-55 text-white relative flex flex-col justify-center items-center overflow-y-auto">
+                <div class="w-full text-center titulo absolute top-0">
+                    <router-link to="/sa/tramites/gratis" class="absolute left-0 mt-4 z-20 hover:scale-125 ml-2">
+                        <fa icon="fa-chevron-left fa-solid" class="text-2xl" />
                     </router-link>
-                    <h1
-                        class="static text-center w-full flex-1 animate__animated animate__bounce text-white animate__flipInX text-[55px] mt-2">
-                        Tramites Gratuitos
-                    </h1>
+                    <h1 class="text-4xl mt-2">Eliminar Tramite Gratuito</h1>
                 </div>
-                <div>
-                    <h2>Eliminar Bufete</h2>
-                    <input v-model="bufeteIdToDelete" placeholder="Ingrese el UID del bufete a eliminar" />
+                <div class="flex flex-col items-center bg-bgblue p-8 rounded-xl shadow-2xl shadow-bgblue opacity-85">
+                    <h2 class="text-2xl mb-4">Eliminar Tramite</h2>
+                    <input v-model="bufeteIdToDelete" placeholder="Ingrese el UID del bufete a eliminar"
+                        class="w-80 bg-white text-black rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <button @click="confirmarEliminacion"
-                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600">
                         Eliminar
                     </button>
                 </div>
